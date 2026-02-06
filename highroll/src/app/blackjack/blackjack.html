@@ -1,0 +1,34 @@
+ <h1>Blackjack</h1>
+
+    <button (click)="startGame()">New Game</button>
+
+    <hr />
+
+    <h3>Player</h3>
+    <div>
+      @for (card of playerHand(); track $index) {
+        <app-bjcard [card]="card"></app-bjcard>
+      }
+    </div>
+    <p>Total: {{ getTotal(playerHand()) }}</p>
+
+    <hr />
+
+    <h3>Dealer</h3>
+    <div>
+      @for (card of dealerHand(); track $index) {
+        <app-bjcard [card]="card"></app-bjcard>
+      }
+    </div>
+    <p>Total: {{ getTotal(dealerHand()) }}</p>
+
+    <hr />
+
+    @if (!gameOver()) {
+      <button (click)="hit()">Hit</button>
+      <button (click)="stand()">Stand</button>
+    }
+
+    @if (gameOver()) {
+      <h2>{{ message() }}</h2>
+    }
