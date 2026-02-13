@@ -1,0 +1,376 @@
+/* ========================================
+   Global Styles & Variables
+   ======================================== */
+
+:root {
+  /* Colors */
+  --primary-color: #6366f1;
+  --secondary-color: #8b5cf6;
+  --accent-color: #ec4899;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --dark-bg: #0f172a;
+  --card-bg: #1e293b;
+  --light-bg: #f8fafc;
+  --text-dark: #1e293b;
+  --text-light: #64748b;
+  --border-color: #e2e8f0;
+  --white: #ffffff;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+
+  /* Typography */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 2.5rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Transitions */
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-dark);
+  background-color: var(--white);
+  line-height: 1.6;
+}
+
+/* ========================================
+   Casino Project Briefing Section
+   ======================================== */
+
+.casino-project-container {
+  background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f35 100%);
+  color: var(--white);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  min-height: 100vh;
+}
+
+.casino-briefing {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.briefing-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 3px solid var(--primary-color);
+  animation: slideDownBounce 0.8s ease-out;
+}
+
+.briefing-header h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.briefing-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.briefing-article {
+  background: var(--card-bg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary-color);
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.briefing-article:hover {
+  transform: translateY(-5px);
+  border-left-color: var(--accent-color);
+  box-shadow: var(--shadow-xl);
+}
+
+.briefing-article h2 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.briefing-article h3 {
+  font-size: var(--font-size-lg);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.briefing-article p {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-base);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.briefing-article p strong {
+  color: var(--success-color);
+  font-weight: 700;
+}
+
+.briefing-article p code {
+  background: rgba(99, 102, 241, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  color: #60a5fa;
+  font-size: var(--font-size-sm);
+}
+
+.briefing-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.briefing-list li {
+  padding-left: 2rem;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  font-size: var(--font-size-base);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.briefing-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--success-color);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.briefing-list li ul {
+  list-style: none;
+  margin-left: 1rem;
+  margin-top: var(--spacing-sm);
+}
+
+.briefing-list li ul li {
+  padding-left: 1.5rem;
+}
+
+.briefing-list li ul li::before {
+  content: '◦';
+  color: var(--accent-color);
+}
+
+.briefing-cta {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+  box-shadow: var(--shadow-xl);
+  animation: slideUp 0.8s ease-out;
+}
+
+.briefing-cta h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--white);
+}
+
+.briefing-btn {
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background: var(--white);
+  color: var(--primary-color);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.briefing-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.briefing-btn:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes slideDownBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .casino-project-container {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .briefing-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .briefing-article {
+    padding: var(--spacing-md);
+  }
+
+  .briefing-article h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .briefing-article h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .briefing-cta {
+    padding: var(--spacing-lg);
+  }
+
+  .briefing-cta h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .briefing-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-3xl: 1.875rem;
+    --font-size-2xl: 1.5rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+  }
+
+  .casino-project-container {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .briefing-header {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+  }
+
+  .briefing-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .briefing-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .briefing-article {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .briefing-article h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .briefing-article p {
+    font-size: var(--font-size-sm);
+  }
+
+  .briefing-list li {
+    padding-left: 1.5rem;
+    font-size: var(--font-size-sm);
+  }
+
+  .briefing-cta {
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+  }
+
+  .briefing-cta h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .briefing-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    width: 100%;
+  }
+}
