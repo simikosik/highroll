@@ -17,6 +17,8 @@ export class Blackjack {
   dealerHand = signal<Card[]>([]);
   gameOver = signal(false);
   message = signal('');
+  dealerHidden = signal(true);
+
 
 
 
@@ -80,6 +82,7 @@ export class Blackjack {
       this.drawCard()
     ]);
 
+    this.dealerHidden.set(true); 
     this.gameOver.set(false);
     this.message.set('');
   }
@@ -96,6 +99,9 @@ export class Blackjack {
   }
 
   stand() {
+
+    this.dealerHidden.set(false);
+    
     while (this.getTotal(this.dealerHand()) < 17) {
       this.dealerHand.update(h => [...h, this.drawCard()]);
     }

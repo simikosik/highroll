@@ -1,34 +1,43 @@
- <h1>Blackjack</h1>
+<h1>Blackjack</h1>
 
-    <button (click)="startGame()">New Game</button>
+<button (click)="startGame()">New Game</button>
 
-    <hr />
+<hr />
 
-    <h3>Player</h3>
-    <div>
-      @for (card of playerHand(); track $index) {
-        <app-bjcard [card]="card"></app-bjcard>
-      }
-    </div>
-    <p>Total: {{ getTotal(playerHand()) }}</p>
+<h3>Player</h3>
+<div>
+  @for (card of playerHand(); track $index) {
+  <app-bjcard [card]="card"></app-bjcard>
+  }
+</div>
+<p>Total: {{ getTotal(playerHand()) }}</p>
 
-    <hr />
+<hr />
 
-    <h3>Dealer</h3>
-    <div>
-      @for (card of dealerHand(); track $index) {
-        <app-bjcard [card]="card"></app-bjcard>
-      }
-    </div>
-    <p>Total: {{ getTotal(dealerHand()) }}</p>
+<h3>Dealer</h3>
+<div>
+  @for (card of dealerHand(); track $index) {
+  @if (dealerHidden() && $index === 1) {
+  <span style="font-size: 24px; margin-right: 8px;">?</span>
+  } @else {
+  <app-bjcard [card]="card"></app-bjcard>
+  }
+  }
+</div>
+@if (dealerHidden()) {
+<p>Total: {{ dealerHand()[0].value }} + ?</p>
+} @else {
+<p>Total: {{ getTotal(dealerHand()) }}</p>
+}
 
-    <hr />
 
-    @if (!gameOver()) {
-      <button (click)="hit()">Hit</button>
-      <button (click)="stand()">Stand</button>
-    }
+<hr />
 
-    @if (gameOver()) {
-      <h2>{{ message() }}</h2>
-    }
+@if (!gameOver()) {
+<button (click)="hit()">Hit</button>
+<button (click)="stand()">Stand</button>
+}
+
+@if (gameOver()) {
+<h2>{{ message() }}</h2>
+}
