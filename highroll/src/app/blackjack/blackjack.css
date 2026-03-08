@@ -1,0 +1,191 @@
+
+
+.header {
+  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(80, 47, 76, 0.15);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #f9f4f5;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.navbar {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: #c8b8db;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.4rem;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+
+.nav-link.active {
+  color: #f9f4f5;
+  border-bottom: 2px solid #f9f4f5;
+}
+
+.nav-link:hover {
+  color: #c8b8db;
+  border-bottom: 2px solid #c8b8db;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 2rem 0;
+  letter-spacing: 2px;
+}
+
+h3 {
+     font-family: 'MingLiU-ExtB',serif;
+}
+
+.section {
+  background: #f9f4f5;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 800px;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 12px rgba(80, 47, 76, 0.1);
+  border-left: 5px solid #70587c;
+}
+
+button {
+  padding: 0.9rem 2rem;
+  border: none;
+  font-family: 'MingLiU-ExtB',serif;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  background-color: #70587c;
+  color: #f9f4f5;
+  margin: 0.5rem;
+}
+
+button:hover {
+  background-color: #502f4c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(112, 88, 124, 0.3);
+}
+
+
+
+h3 {
+  color: #502f4c;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.player, .dealer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.par {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #502f4c;
+  font-weight: 600;
+  margin: 1rem 0;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #502f4c;
+  margin: 2rem 0;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer{
+  padding: 1rem 2rem;
+  font-family: 'MingLiU-ExtB',serif;
+  font-size:0.8rem;
+  margin:0;
+  letter-spacing: 4px;
+  text-align: center;
+  
+}
+
+
+
+.buttons {
+  display: flex;
+  font-family: 'ITC Eras Light',serif;
+  justify-content: center;
+  gap: 1rem;
+ 
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .navbar {
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+
+  button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    margin: 0.3rem;
+  }
+}

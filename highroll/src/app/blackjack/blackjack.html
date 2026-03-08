@@ -1,43 +1,69 @@
-<h1>Blackjack</h1>
+<div class="home-container">
 
-<button (click)="startGame()">New Game</button>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <h1>HIGHROLL</h1>
+      </div>
+      <nav class="navbar">
+        <a routerLink="" class="nav-link">Home</a>
+        <a routerLink="/bj" class="nav-link active">Blackjack</a>
+        <a href="#about" class="nav-link">O nás</a>
+      </nav>
+    </div>
+  </header>
 
-<hr />
 
-<h3>Player</h3>
-<div>
-  @for (card of playerHand(); track $index) {
-  <app-bjcard [card]="card"></app-bjcard>
-  }
+  <h3>blackjack</h3>
+  <div class="buttons">
+  <button (click)="startGame()">new game</button>
 </div>
-<p>Total: {{ getTotal(playerHand()) }}</p>
+  <hr />
 
-<hr />
+  <h3>player</h3>
+  <div class="player" class="section">
+    @for (card of playerHand(); track $index) {
+    <app-bjcard [card]="card"></app-bjcard>
+    }
+  </div>
+  <p class="par">Total: {{ getTotal(playerHand()) }}</p>
 
-<h3>Dealer</h3>
-<div>
-  @for (card of dealerHand(); track $index) {
-  @if (dealerHidden() && $index === 1) {
-  <span style="font-size: 24px; margin-right: 8px;">?</span>
+  <hr />
+
+  <h3>dealer</h3>
+  <div class="dealer" class="section">
+    @for (card of dealerHand(); track $index) {
+    @if (dealerHidden() && $index === 1) {
+    <span style="font-size: 24px; margin-right: 8px;">?</span>
+    } @else {
+    <app-bjcard [card]="card"></app-bjcard>
+    }
+    }
+  </div>
+  @if (dealerHidden()) {
+  <p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
   } @else {
-  <app-bjcard [card]="card"></app-bjcard>
+  <p class="par"  >Total: {{ getTotal(dealerHand()) }}</p>
   }
+
+
+  <hr />
+  <div class="buttons">
+  @if (!gameOver()) {
+  <button (click)="hit()">hit</button>
+  <button (click)="stand()">stand</button>
   }
+  </div>
+
+  @if (gameOver()) {
+  <h2>{{ message() }}</h2>
+  }
+
+
+  <hr />
+
+  <footer class="footer">
+    <p>highroll | matulpal je absolutna legenda | 2026  </p>
+  </footer>
+
 </div>
-@if (dealerHidden()) {
-<p>Total: {{ dealerHand()[0].value }} + ?</p>
-} @else {
-<p>Total: {{ getTotal(dealerHand()) }}</p>
-}
-
-
-<hr />
-
-@if (!gameOver()) {
-<button (click)="hit()">Hit</button>
-<button (click)="stand()">Stand</button>
-}
-
-@if (gameOver()) {
-<h2>{{ message() }}</h2>
-}

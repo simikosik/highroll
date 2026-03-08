@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { BjCard, Card } from '../bjcard/bjcard';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-blackjack',

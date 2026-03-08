@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 
 
-import { DashboardComponent } from './dashboard/dashboard';
-
 import { Home } from './home/home';
 import { Blackjack } from './blackjack/blackjack';
 import { Blog } from './blog/blog';
