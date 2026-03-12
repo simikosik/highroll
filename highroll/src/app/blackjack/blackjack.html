@@ -1,69 +1,86 @@
-<div class="home-container">
-
-  <header class="header">
-    <div class="header-content">
-      <div class="logo">
-        <h1>HIGHROLL</h1>
-      </div>
-      <nav class="navbar">
-        <a routerLink="" class="nav-link">Home</a>
-        <a routerLink="/bj" class="nav-link active">Blackjack</a>
-        <a href="#about" class="nav-link">O nás</a>
-      </nav>
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <h1>HIGHROLL</h1>
     </div>
-  </header>
+    <nav class="navbar">
+      <a routerLink=" " class="nav-link">Home</a>
+      <a routerLink="/bj" class="nav-link active">Blackjack</a>
+      <a href="#about" class="nav-link">O nás</a>
+    </nav>
+  </div>
+</header>
 
 
-  <h3>blackjack</h3>
-  <div class="buttons">
+<h3>blackjack</h3>
+<div class="buttons">
   <button (click)="startGame()">new game</button>
 </div>
-  <hr />
+<hr />
+<deck-visualizer></deck-visualizer>
+<hr />
 
-  <h3>player</h3>
-  <div class="player" class="section">
-    @for (card of playerHand(); track $index) {
-    <app-bjcard [card]="card"></app-bjcard>
-    }
+<h3>player</h3>
+<div class="player">
+  @for (hand of playerHands(); track currentHandIndex) {
+  <div class="hand" [class.active]="currentHandIndex()">
+    <div class="card-row">
+      @for (card of hand; track $index) {
+      <app-bjcard [card]="card"></app-bjcard>
+      }
+    </div>
+    <p class="par">Total: {{ getTotal(hand) }}</p>
   </div>
-  <p class="par">Total: {{ getTotal(playerHand()) }}</p>
+  }
+</div>
 
-  <hr />
 
-  <h3>dealer</h3>
-  <div class="dealer" class="section">
+<hr />
+
+<h3>dealer</h3>
+<div class="dealer">
+  <div class="hand">
+    <div class="card-row">
     @for (card of dealerHand(); track $index) {
     @if (dealerHidden() && $index === 1) {
     <span style="font-size: 24px; margin-right: 8px;">?</span>
     } @else {
-    <app-bjcard [card]="card"></app-bjcard>
+    
+      <app-bjcard [card]="card"></app-bjcard>
+  
     }
     }
+    </div>
   </div>
-  @if (dealerHidden()) {
-  <p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
-  } @else {
-  <p class="par"  >Total: {{ getTotal(dealerHand()) }}</p>
-  }
-
-
-  <hr />
-  <div class="buttons">
-  @if (!gameOver()) {
-  <button (click)="hit()">hit</button>
-  <button (click)="stand()">stand</button>
-  }
-  </div>
-
-  @if (gameOver()) {
-  <h2>{{ message() }}</h2>
-  }
-
-
-  <hr />
-
-  <footer class="footer">
-    <p>highroll | matulpal je absolutna legenda | 2026  </p>
-  </footer>
-
 </div>
+@if (dealerHidden()) {
+<p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
+} @else {
+<p class="par">Total: {{ getTotal(dealerHand()) }}</p>
+}
+
+
+<hr />
+<div class="buttons">
+  @if (!gameOver()) {
+  <button style="height: 50px;" (click)="hit()">hit</button>
+  <button style="height: 50px;" (click)="stand()">stand</button>
+  <div class="side">
+    <button class="sidebutton" (click)="split()">split</button>
+    <button class="sidebutton" (click)="double()">double</button>
+  </div>
+  }
+</div>
+
+
+
+@if (gameOver()) {
+<h2>{{ message() }}</h2>
+}
+
+
+<hr />
+
+<footer class="footer">
+  <p>highroll | matulpal je absolutna legenda | 2026 </p>
+</footer>

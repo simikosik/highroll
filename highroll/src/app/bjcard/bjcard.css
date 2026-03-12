@@ -1,0 +1,8 @@
+.card {
+  width: 60px;
+  height: 90px;
+  border-radius: 6px;
+  background: white;
+  border: 2px solid rgb(174, 174, 174);
+  transform: translateY(calc(var(--i, 0) * -2px));
+}

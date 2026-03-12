@@ -1,134 +1,189 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { BjCard, Card } from '../bjcard/bjcard';
+import { Deck } from '../deck';
+import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
+import { Home } from '../home/home';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [BjCard],
+  imports: [BjCard, DeckVisualizer, Home, RouterLink],
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
 export class Blackjack {
 
-  
 
-  deck = signal<Card[]>([]);
-  playerHand = signal<Card[]>([]);
+  deck = inject(Deck);
+  canSplit = signal(false);
+  canDouble = signal(false);
+  playerHands = signal<Card[][]>([]);
+  currentHandIndex = signal(0);
   dealerHand = signal<Card[]>([]);
   gameOver = signal(false);
   message = signal('');
   dealerHidden = signal(true);
 
+startGame() {
 
+  const first = this.deck.draw();
+  const second = this.deck.draw();
 
+  this.playerHands.set([[first, second]]);
+  this.currentHandIndex.set(0);
 
-  createDeck(): Card[] {
-    const suits: Card['suit'][] = ['♠', '♥', '♦', '♣'];
+  this.dealerHand.set([
+    this.deck.draw(),
+    this.deck.draw()
+  ]);
 
-    const ranks = [
-      { rank: 'A', value: 11 },
-      { rank: '2', value: 2 },
-      { rank: '3', value: 3 },
-      { rank: '4', value: 4 },
-      { rank: '5', value: 5 },
-      { rank: '6', value: 6 },
-      { rank: '7', value: 7 },
-      { rank: '8', value: 8 },
-      { rank: '9', value: 9 },
-      { rank: '10', value: 10 },
-      { rank: 'J', value: 10 },
-      { rank: 'Q', value: 10 },
-      { rank: 'K', value: 10 }
-    ];
+  this.dealerHidden.set(true);
+  this.gameOver.set(false);
+  this.message.set('');
 
-    const deck: Card[] = [];
+  this.updateActions();
 
-    for (const suit of suits) {
-      for (const r of ranks) {
-        deck.push({
-          suit,
-          rank: r.rank,
-          value: r.value
-        });
-      }
-    }
+}
 
-    return deck;
+hit() {
+
+  if (this.gameOver()) return;
+
+  const hands = [...this.playerHands()];
+  const i = this.currentHandIndex();
+
+  hands[i] = [...hands[i], this.deck.draw()];
+
+  this.playerHands.set(hands);
+
+  if (this.getTotal(hands[i]) > 21) {
+    this.nextHand();
   }
 
-  shuffle(cards: Card[]): Card[] {
-    return cards.sort(() => Math.random() - 0.5);
+  this.updateActions();
+
+}
+
+double() {
+
+  if (!this.canDouble()) return;
+
+  const hands = [...this.playerHands()];
+  const i = this.currentHandIndex();
+
+  hands[i] = [...hands[i], this.deck.draw()];
+
+  this.playerHands.set(hands);
+
+  this.nextHand();
+
+}
+
+split() {
+
+  if (!this.canSplit()) return;
+
+  const hands = [...this.playerHands()];
+  const i = this.currentHandIndex();
+
+  const [card1, card2] = hands[i];
+
+  hands.splice(i, 1,
+    [card1, this.deck.draw()],
+    [card2, this.deck.draw()]
+  );
+
+  this.playerHands.set(hands);
+
+  this.updateActions();
+
+}
+
+nextHand() {
+
+  if (this.currentHandIndex() < this.playerHands().length - 1) {
+    this.currentHandIndex.update(i => i + 1);
+    this.updateActions();
+    return;
   }
 
-  drawCard(): Card {
-    const currentDeck = this.deck();
-    const card = currentDeck.pop()!;
-    this.deck.set([...currentDeck]);
-    return card;
-  }
+  this.stand();
 
+}
 
-  startGame() {
-    const newDeck = this.shuffle(this.createDeck());
-    this.deck.set(newDeck);
+updateActions() {
 
-    this.playerHand.set([
-      this.drawCard(),
-      this.drawCard()
-    ]);
+  const hand = this.currentHand();
 
-    this.dealerHand.set([
-      this.drawCard(),
-      this.drawCard()
-    ]);
+  this.canDouble.set(hand.length === 2);
 
-    this.dealerHidden.set(true); 
-    this.gameOver.set(false);
-    this.message.set('');
-  }
+  this.canSplit.set(
+    hand.length === 2 &&
+    hand[0].rank === hand[1].rank
+  );
 
-  hit() {
-    if (this.gameOver()) return;
+}
 
-    this.playerHand.update(h => [...h, this.drawCard()]);
-
-    if (this.getTotal(this.playerHand()) > 21) {
-      this.gameOver.set(true);
-      this.message.set('Bust!');
-    }
-  }
+currentHand(): Card[] {
+  return this.playerHands()[this.currentHandIndex()];
+}
 
   stand() {
 
     this.dealerHidden.set(false);
-    
+
     while (this.getTotal(this.dealerHand()) < 17) {
-      this.dealerHand.update(h => [...h, this.drawCard()]);
+      this.dealerHand.update(h => [...h, this.deck.draw()]);
     }
 
     this.finishGame();
+
+  }
+  
+
+finishGame() {
+
+  const dealer = this.getTotal(this.dealerHand());
+  const hand = this.currentHand();
+  const player = this.getTotal(hand);
+
+  if (dealer > 21) {
+    this.message.set('Dealer bust, W!');
+  } else if (player > dealer) {
+    this.message.set('W!');
+  } else if (player < dealer) {
+    this.message.set('Dealer W!');
+  } else {
+    this.message.set('Tie!');
   }
 
-  finishGame() {
-    const player = this.getTotal(this.playerHand());
-    const dealer = this.getTotal(this.dealerHand());
+  this.gameOver.set(true);
 
-    if (dealer > 21) {
-      this.message.set('Dealer bust, W!');
-    } else if (player > dealer) {
-      this.message.set('W!');
-   
-    } else if (player < dealer) {
-      this.message.set('Dealer W!');
-    } else {
-      this.message.set('Tie!');
-    }
-
-    this.gameOver.set(true);
-  }
+}
 
   getTotal(hand: Card[]): number {
-    return hand.reduce((sum, card) => sum + card.value, 0);
+
+    let total = 0;
+    let aces = 0;
+
+    for (const card of hand) {
+
+      total += card.value;
+
+      if (card.rank === 'A') {
+        aces++;
+      }
+
+    }
+
+    while (total > 21 && aces > 0) {
+      total -= 10;
+      aces--;
+    }
+
+    return total;
+
   }
+
 }

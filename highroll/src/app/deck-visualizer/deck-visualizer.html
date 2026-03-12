@@ -1,0 +1,11 @@
+<div class="deck">
+
+  <div class="stack">
+    @for (card of [].constructor(stackSize()); track $index) {
+      <div class="card-back"></div>
+    }
+  </div>
+
+  <p>cards left: {{ cardsLeft() }}</p>
+
+</div>
