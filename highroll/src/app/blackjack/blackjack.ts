@@ -148,7 +148,9 @@ finishGame() {
   const hand = this.currentHand();
   const player = this.getTotal(hand);
 
-  if (dealer > 21) {
+  if (player > 21) {
+    this.message.set('Bust');
+  } else if (dealer > 21) {
     this.message.set('Dealer bust, W!');
   } else if (player > dealer) {
     this.message.set('W!');
