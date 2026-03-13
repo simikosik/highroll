@@ -156,6 +156,8 @@ finishGame() {
     this.message.set('W!');
   } else if (player < dealer) {
     this.message.set('Dealer W!');
+   } else if (player > 21 && dealer > 21) {
+    this.message.set('Bust!');
   } else {
     this.message.set('Tie!');
   }
