@@ -3,10 +3,13 @@ import { Home } from './home/home';
 import { Blackjack } from './blackjack/blackjack';
 import { Blog } from './blog/blog';
 import { About } from './about/about';
+import { Login } from './login/login';
+import { authGuard } from './auth-guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
-    { path: 'bj', component: Blackjack },
+    { path: 'login', component: Login },
+    { path: 'bj', component: Blackjack, canActivate: [authGuard] },
     { path: 'about', component: About },
     { path: 'blog', component: Blog },
     { path: '**', redirectTo: '' }

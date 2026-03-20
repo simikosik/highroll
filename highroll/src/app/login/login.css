@@ -1,0 +1,73 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-family: 'MingLiU-ExtB', serif;
+    text-align: center;
+     color: #f9f4f5;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+button {
+    padding: 10px;
+   background-color: #c8b8db;
+    color: #502f4c;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #f9f4f5;
+}
+
+button:active {
+    background-color: #c8b8db;
+}
+
+hr {
+    width: 100%;
+    margin: 15px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+button[data-google] {
+      background-color: #c8b8db;
+}
+
+
+button[data-google]:hover {
+      background-color: #f9f4f5;
+}

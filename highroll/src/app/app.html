@@ -7,11 +7,9 @@
 </head>
 <body>
     <nav>
-  <a routerLink="">home</a> |
-  <a routerLink="/bj">blackjack</a>
-  
-
-</nav>
+      <button *ngIf="auth.user()" (click)="auth.logout()">Logout</button>
+      <button *ngIf="!auth.user()" routerLink="/login">Login</button>
+    </nav>
 
 <hr>
 

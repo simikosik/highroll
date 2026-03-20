@@ -147,6 +147,10 @@ body {
   margin: 0 auto;
 }
 
+.ss , .ss:visited {
+  color: #502f4c;
+}
+
 .section-title {
   text-align: center;
   font-size: 2rem;
@@ -198,6 +202,7 @@ body {
   font-family: 'MingLiU-ExtB',serif;
   font-size:0.8rem;
   letter-spacing: 4px;
+  text-decoration: none;
   text-align: center;
   
 }

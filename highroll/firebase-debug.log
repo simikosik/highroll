@@ -1,0 +1,39 @@
+[debug] [2026-03-20T08:21:16.057Z] ----------------------------------------------------------------------
+[debug] [2026-03-20T08:21:16.059Z] Command:       C:\Users\kosiks23\nodejs\node-v22.19.0-win-x64\node.exe C:\Users\kosiks23\nodejs\node-v22.19.0-win-x64\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-03-20T08:21:16.060Z] CLI Version:   15.11.0
+[debug] [2026-03-20T08:21:16.060Z] Platform:      win32
+[debug] [2026-03-20T08:21:16.060Z] Node Version:  v22.19.0
+[debug] [2026-03-20T08:21:16.060Z] Time:          Fri Mar 20 2026 09:21:16 GMT+0100 (stredoeurópsky štandardný čas)
+[debug] [2026-03-20T08:21:16.061Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-20T08:21:16.063Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\kosiks23\hr\highroll\highroll
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[debug] [2026-03-20T08:21:42.432Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-03-20T08:21:42.432Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-03-20T08:23:12.907Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\kosiks23\nodejs\node-v22.19.0-win-x64\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:519:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1132:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:271:20)
+    at ReadStream.emit (node:events:531:35)
+    at emitKeys (node:internal/readline/utils:370:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:561:12)
+[error] 
+[error] Error: An unexpected error has occurred.

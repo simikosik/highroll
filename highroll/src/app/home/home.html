@@ -17,9 +17,15 @@
     <div class="hero-content">
       <h2 class="hero-title">highroll</h2>
       <p class="hero-subtitle">naučte sa o rizikách hazardu...</p>
-      <button class="btn btn-primary btn-large" routerLink="/bj">
-        ďalej
-      </button>
+     @if (auth.user()) {
+  <button class="btn btn-primary btn-large" routerLink="/bj">
+    ďalej
+  </button>
+} @else {
+  <button class="btn btn-primary btn-large" routerLink="/login">
+    prihlásiť sa
+  </button>
+}
     </div>
   </section>
   
@@ -45,6 +51,6 @@
   
  <hr />
   <footer class="footer">
-    <p>highroll | matulpal je absolutna legenda | 2026  </p>
+    <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026  </p>
   </footer>
 </div>

@@ -17,6 +17,10 @@
   align-items: center;
 }
 
+.ss , .ss:visited {
+  color: #502f4c;
+}
+
 .logo {
   color: #f9f4f5;
   font-size: 1.8rem;

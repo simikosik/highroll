@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../auth';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -10,5 +12,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.css',
 })
 export class Home {
-
+ auth = inject(AuthService);
 }
