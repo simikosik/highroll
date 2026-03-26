@@ -75,6 +75,34 @@ h3 {
      font-family: 'MingLiU-ExtB',serif;
 }
 
+.deck {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.balance-info {
+  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+  color: #f9f4f5;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-radius: 0.8rem;
+}
+
+.balance-info h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #f9f4f5;
+}
+
+.balance-info h3 {
+  margin: 0.5rem 0 0 0;
+  font-size: 1.3rem;
+  color: #c8b8db;
+}
+
 .section {
   background: #f9f4f5;
   padding: 1rem;
@@ -163,6 +191,60 @@ h2 {
   text-align: center;
   
 }
+
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.game-area {
+  flex: 2;
+}
+
+.side-panel {
+    flex: none;
+  padding: 4px;
+   width: 260px; 
+  border-radius: 12px;
+  background: #a293b8;
+  color: white;
+  position: sticky;
+  top: 20%;
+}
+
+.side-panel {
+  border-left: 2px solid #502f4c;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(5px); 
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: black;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 
 
 

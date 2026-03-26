@@ -1,0 +1,4 @@
+Stat panel W/R %: n.o. L to W, house edge
+
+Losestreak detection
+

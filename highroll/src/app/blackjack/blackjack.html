@@ -6,81 +6,159 @@
     <nav class="navbar">
       <a routerLink=" " class="nav-link">Home</a>
       <a routerLink="/bj" class="nav-link active">Blackjack</a>
-      <a href="/about" class="nav-link">O nás</a>
+      <a routerLink="/about" class="nav-link">O nás</a>
     </nav>
   </div>
 </header>
 
+<div class="layout">
 
-<h3>blackjack</h3>
-<div class="buttons">
-  <button (click)="startGame()">new game</button>
-</div>
-<hr />
-<deck-visualizer></deck-visualizer>
-<hr />
 
-<h3>player</h3>
-<div class="player">
-  @for (hand of playerHands(); track currentHandIndex) {
-  <div class="hand" [class.active]="currentHandIndex()">
-    <div class="card-row">
-      @for (card of hand; track $index) {
-      <app-bjcard [card]="card"></app-bjcard>
+  <div class="game-area">
+
+    <h3>blackjack</h3>
+
+
+    <div class="buttons">
+      @if (!gameInProgress()) {
+      <div class="betting-section">
+        <label>Bet Amount: </label>
+
+        <input type="number" [value]="bet()" (input)="updateBet($event.target.value)" min="1" [max]="balance()"
+          class="bet-input" />
+
+        <button (click)="startGame()" [disabled]="bet() <= 0 || bet() > balance()">
+          Place Bet & Start
+        </button>
+      </div>
+      } @else {
+      <button disabled>Game in Progress...</button>
       }
     </div>
-    <p class="par">Total: {{ getTotal(hand) }}</p>
-  </div>
-  }
-</div>
 
 
-<hr />
-
-<h3>dealer</h3>
-<div class="dealer">
-  <div class="hand">
-    <div class="card-row">
-    @for (card of dealerHand(); track $index) {
-    @if (dealerHidden() && $index === 1) {
-    <span style="font-size: 24px; margin-right: 8px;">?</span>
-    } @else {
-    
-      <app-bjcard [card]="card"></app-bjcard>
-  
-    }
-    }
+    <h3>dealer</h3>
+    <div class="dealer">
+      <div class="hand">
+        <div class="card-row">
+          @for (card of dealerHand(); track $index) {
+          @if (dealerHidden() && $index === 1) {
+          <span style="font-size: 24px;">?</span>
+          } @else {
+          <app-bjcard [card]="card"></app-bjcard>
+          }
+          }
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-@if (dealerHidden()) {
-<p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
-} @else {
-<p class="par">Total: {{ getTotal(dealerHand()) }}</p>
-}
 
+    @if (dealerHidden()) {
+    <p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
+    } @else {
+    <p class="par">Total: {{ getTotal(dealerHand()) }}</p>
+    }
+
+    <hr />
+
+
+    <h3>player</h3>
+    <div class="player">
+      @for (hand of playerHands(); track $index) {
+      <div class="hand" [class.active]="$index === currentHandIndex()">
+        <div class="card-row">
+          @for (card of hand; track $index) {
+          <app-bjcard [card]="card"></app-bjcard>
+          }
+        </div>
+        <p class="par">Total: {{ getTotal(hand) }}</p>
+      </div>
+      }
+    </div>
+
+    <hr />
+
+
+    <div class="buttons">
+      @if (!gameOver()) {
+
+      <div class="tooltip">
+        <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
+        <button (click)="hit()">hit</button>
+      </div>
+
+      <div class="tooltip">
+        <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
+        <button (click)="stand()">stand</button>
+      </div>
+
+      <div class="side">
+
+        <div class="tooltip">
+          <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
+          <button class="sidebutton" (click)="split()">split</button>
+        </div>
+
+        <div class="tooltip">
+          <span class="tooltip-text">zdvojnásobíš svoju aktuálnu stávku za cenu, že si zoberieš len jednu poslednú
+            kartu</span>
+          <button class="sidebutton" (click)="double()" [disabled]="!isDoubleAvailable()"
+            [title]="currentBet() > balance() ? 'Not enough balance!' : ''">
+            double
+          </button>
+        </div>
+
+      </div>
+
+      }
+    </div>
+
+
+    @if (gameOver()) {
+    <h2>{{ message() }}</h2>
+    }
+
+  </div>
+
+
+  <div class="side-panel">
+
+    <div class="balance-info">
+      <h2>Balance: ${{ balance() }}</h2>
+
+      @if (gameInProgress()) {
+      <h3>Current Bet: ${{ currentBet() }}</h3>
+
+      @if (doubleBet() > 0) {
+      <h3 style="color: #ff6b6b;">
+        Double Bet: ${{ doubleBet() }}
+      </h3>
+      }
+      }
+    </div>
+
+    <h3>Deck</h3>
+    <deck-visualizer></deck-visualizer>
+
+    <hr />
+
+    <h3>Stats</h3>
+    <p>Wins: {{ stats.wins() }}</p>
+    <p>Losses: {{ stats.losses() }}</p>
+    <p>Win rate: {{ stats.getWinRate() }}%</p>
+    <p>House edge: {{ stats.getHouseEdge() }}</p>
+
+    @if (stats.lossStreak() >= 3) {
+    <p style="color: red;">
+      You lost {{ stats.lossStreak() }} times in a row.
+    </p>
+    }
+
+  </div>
+
+</div>
 
 <hr />
-<div class="buttons">
-  @if (!gameOver()) {
-  <button style="height: 50px;" (click)="hit()">hit</button>
-  <button style="height: 50px;" (click)="stand()">stand</button>
-  <div class="side">
-    <button class="sidebutton" (click)="split()">split</button>
-    <button class="sidebutton" (click)="double()">double</button>
-  </div>
-  }
-</div>
 
-
-
-@if (gameOver()) {
-<h2>{{ message() }}</h2>
-}
-
-
-<hr />
-
-<footer class="footer">
-  <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026 </p>
-</footer>
+  <footer class="footer">
+    <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026  </p>
+  </footer>

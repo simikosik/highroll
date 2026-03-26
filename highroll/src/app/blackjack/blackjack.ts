@@ -4,6 +4,8 @@ import { Deck } from '../deck';
 import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
 import { Home } from '../home/home';
 import { RouterLink } from '@angular/router';
+import { Stats } from '../stats';
+import { balance, changeBalance } from '../balance/balance.store';
 
 @Component({
   selector: 'app-blackjack',
@@ -16,6 +18,7 @@ export class Blackjack {
 
 
   deck = inject(Deck);
+  balance = balance;  
   canSplit = signal(false);
   canDouble = signal(false);
   playerHands = signal<Card[][]>([]);
@@ -25,7 +28,25 @@ export class Blackjack {
   message = signal('');
   dealerHidden = signal(true);
 
+  bet = signal(0);
+  currentBet = signal(0);
+  doubleBet = signal(0);
+  gameInProgress = signal(false);
+  stats = inject(Stats);
+  
+
 startGame() {
+
+  const betAmount = this.bet();
+  if (betAmount <= 0 || betAmount > this.balance()) {
+    this.message.set('Invalid bet amount!');
+    return;
+  }
+
+  changeBalance(-betAmount);
+  this.currentBet.set(betAmount);
+  this.doubleBet.set(0);
+  this.gameInProgress.set(true);
 
   const first = this.deck.draw();
   const second = this.deck.draw();
@@ -68,6 +89,17 @@ hit() {
 double() {
 
   if (!this.canDouble()) return;
+
+  const betAmount = this.currentBet();
+  const currentBalance = this.balance();
+
+  if (betAmount > currentBalance) {
+    this.message.set('Not enough balance to double!');
+    return;
+  }
+
+  changeBalance(-betAmount);
+  this.doubleBet.set(betAmount);
 
   const hands = [...this.playerHands()];
   const i = this.currentHandIndex();
@@ -125,8 +157,16 @@ updateActions() {
 
 }
 
+updateBet(value: string) {
+  this.bet.set(Number(value));
+}
+
 currentHand(): Card[] {
   return this.playerHands()[this.currentHandIndex()];
+}
+
+isDoubleAvailable(): boolean {
+  return this.canDouble() && this.currentBet() <= this.balance();
 }
 
   stand() {
@@ -147,22 +187,45 @@ finishGame() {
   const dealer = this.getTotal(this.dealerHand());
   const hand = this.currentHand();
   const player = this.getTotal(hand);
+   const currentBet = this.currentBet();
+  const doubleBet = this.doubleBet();
+  const totalBet = currentBet + doubleBet;
+
+  let winnings = 0;
+  let resultMessage = '';
 
   if (player > 21) {
     this.message.set('Bust');
+     this.stats.recordLoss();
+    winnings = 0;
   } else if (dealer > 21) {
     this.message.set('Dealer bust, W!');
+    this.stats.recordWin();
+    winnings = totalBet * 2;
   } else if (player > dealer) {
     this.message.set('W!');
+    this.stats.recordWin();
+    winnings = totalBet * 2;
   } else if (player < dealer) {
     this.message.set('Dealer W!');
+    this.stats.recordLoss();
+    winnings = 0;
    } else if (player > 21 && dealer > 21) {
     this.message.set('Bust!');
+    winnings = 0;
+    this.stats.recordLoss();
   } else {
     this.message.set('Tie!');
+    winnings = totalBet;
   }
 
+    if (winnings > 0) {
+    changeBalance(winnings);
+  }
+
+  this.message.set(resultMessage);
   this.gameOver.set(true);
+  this.gameInProgress.set(false);
 
 }
 
