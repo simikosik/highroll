@@ -83,7 +83,7 @@ h3 {
 }
 
 .balance-info {
-  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+ 
   color: #f9f4f5;
   padding: 1.5rem 2rem;
   text-align: center;
@@ -93,14 +93,15 @@ h3 {
 
 .balance-info h2 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
   color: #f9f4f5;
 }
 
 .balance-info h3 {
   margin: 0.5rem 0 0 0;
-  font-size: 1.3rem;
-  color: #c8b8db;
+  font-size: 1rem;
+  color: #502f4c;
 }
 
 .section {

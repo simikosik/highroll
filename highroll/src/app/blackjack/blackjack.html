@@ -136,6 +136,8 @@
       }
     </div>
 
+      <hr />
+
     <h3>Deck</h3>
     <deck-visualizer></deck-visualizer>
 
@@ -148,7 +150,7 @@
     <p>House edge: {{ stats.getHouseEdge() }}</p>
 
     @if (stats.lossStreak() >= 3) {
-    <p style="color: red;">
+    <p style="color: rgb(112, 12, 12);">
       You lost {{ stats.lossStreak() }} times in a row.
     </p>
     }
@@ -159,6 +161,7 @@
 
 <hr />
 
-  <footer class="footer">
-    <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026  </p>
-  </footer>
+<footer class="footer">
+  <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026
+  </p>
+</footer>
