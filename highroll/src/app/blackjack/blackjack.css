@@ -86,21 +86,23 @@ h3 {
  
   color: #f9f4f5;
   padding: 1.5rem 2rem;
-  text-align: center;
   margin-bottom: 1.5rem;
   border-radius: 0.8rem;
 }
 
-.balance-info h2 {
-  margin: 0;
-  font-size: 1rem;
-  font-family: Arial, Helvetica, sans-serif;
+
+
+.stats-info {
+ 
   color: #f9f4f5;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.8rem;
 }
 
-.balance-info h3 {
-  margin: 0.5rem 0 0 0;
-  font-size: 1rem;
+.stat-h3 {
+  margin: 1rem 0 0 0;
+  padding-bottom: -1rem;
   color: #502f4c;
 }
 

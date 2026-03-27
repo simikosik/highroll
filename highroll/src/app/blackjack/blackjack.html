@@ -28,11 +28,11 @@
           class="bet-input" />
 
         <button (click)="startGame()" [disabled]="bet() <= 0 || bet() > balance()">
-          Place Bet & Start
+          place bet & start
         </button>
       </div>
       } @else {
-      <button disabled>Game in Progress...</button>
+      <button disabled>game in progress...</button>
       }
     </div>
 
@@ -53,9 +53,9 @@
     </div>
 
     @if (dealerHidden()) {
-    <p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
+    <p class="par">total: {{ dealerHand()[0].value }} + ?</p>
     } @else {
-    <p class="par">Total: {{ getTotal(dealerHand()) }}</p>
+    <p class="par">total: {{ getTotal(dealerHand()) }}</p>
     }
 
     <hr />
@@ -70,7 +70,7 @@
           <app-bjcard [card]="card"></app-bjcard>
           }
         </div>
-        <p class="par">Total: {{ getTotal(hand) }}</p>
+        <p class="par">total: {{ getTotal(hand) }}</p>
       </div>
       }
     </div>
@@ -123,38 +123,40 @@
   <div class="side-panel">
 
     <div class="balance-info">
-      <h2>Balance: ${{ balance() }}</h2>
+      <h3 class="stat-h3">balance</h3>
 
+      <p>current balance: ${{ balance() }}</p>
       @if (gameInProgress()) {
-      <h3>Current Bet: ${{ currentBet() }}</h3>
+      <p>current bet: ${{ currentBet() }}</p>
 
       @if (doubleBet() > 0) {
-      <h3 style="color: #ff6b6b;">
-        Double Bet: ${{ doubleBet() }}
-      </h3>
+      <p style="color: #ff6b6b;">
+        double bet: ${{ doubleBet() }}
+      </p>
       }
       }
     </div>
 
-      <hr />
+    <hr />
 
-    <h3>Deck</h3>
+    <h3>deck</h3>
     <deck-visualizer></deck-visualizer>
 
     <hr />
 
-    <h3>Stats</h3>
-    <p>Wins: {{ stats.wins() }}</p>
-    <p>Losses: {{ stats.losses() }}</p>
-    <p>Win rate: {{ stats.getWinRate() }}%</p>
-    <p>House edge: {{ stats.getHouseEdge() }}</p>
+    <h3 class="stat-h3">stats</h3>
+    <div class="stats-info">
+      <p>wins: {{ stats.wins() }}</p>
+      <p>losses: {{ stats.losses() }}</p>
+      <p>win rate: {{ stats.getWinRate() }}%</p>
+      <p>house edge: {{ stats.getHouseEdge() }}</p>
 
-    @if (stats.lossStreak() >= 3) {
-    <p style="color: rgb(112, 12, 12);">
-      You lost {{ stats.lossStreak() }} times in a row.
-    </p>
-    }
-
+      @if (stats.lossStreak() >= 3) {
+      <p style="color: rgb(112, 12, 12);">
+        you lost {{ stats.lossStreak() }} times in a row.
+      </p>
+      }
+    </div>
   </div>
 
 </div>

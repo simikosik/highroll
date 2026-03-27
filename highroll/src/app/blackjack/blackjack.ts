@@ -195,27 +195,27 @@ finishGame() {
   let resultMessage = '';
 
   if (player > 21) {
-    this.message.set('Bust');
+    this.message.set('bust');
      this.stats.recordLoss();
     winnings = 0;
   } else if (dealer > 21) {
-    this.message.set('Dealer bust, W!');
+    this.message.set('dealer bust, w!');
     this.stats.recordWin();
     winnings = totalBet * 2;
   } else if (player > dealer) {
-    this.message.set('W!');
+    this.message.set('w!');
     this.stats.recordWin();
     winnings = totalBet * 2;
   } else if (player < dealer) {
-    this.message.set('Dealer W!');
+    this.message.set('dealer w!');
     this.stats.recordLoss();
     winnings = 0;
    } else if (player > 21 && dealer > 21) {
-    this.message.set('Bust!');
+    this.message.set('bust!');
     winnings = 0;
     this.stats.recordLoss();
   } else {
-    this.message.set('Tie!');
+    this.message.set('tie!');
     winnings = totalBet;
   }
 

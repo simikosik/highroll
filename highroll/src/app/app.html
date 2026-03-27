@@ -7,11 +7,10 @@
 </head>
 <body>
     <nav>
-      <button *ngIf="auth.user()" (click)="auth.logout()">Logout</button>
+      <button *ngIf="auth.user()" (click)="auth.logout()"  routerLink="/login">Logout</button>
       <button *ngIf="!auth.user()" routerLink="/login">Login</button>
     </nav>
 
-<hr>
 
   <router-outlet></router-outlet>
 </body>
