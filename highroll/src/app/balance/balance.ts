@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { balance, changeBalance } from './balance.store';
+import { Component, inject } from '@angular/core';
+import { UserData } from '../userdata';
 
 @Component({
   selector: 'app-balance',
@@ -8,8 +8,9 @@ import { balance, changeBalance } from './balance.store';
   styleUrl: './balance.css'
 })
 export class Balance {
-  readonly balance = balance;
+  private userData = inject(UserData);
+  readonly balance = this.userData.balance;
 
-  addTen = () => changeBalance(10);
-  subTen = () => changeBalance(-10);
+  addTen = () => this.userData.updateBalance(10);
+  subTen = () => this.userData.updateBalance(-10);
 }

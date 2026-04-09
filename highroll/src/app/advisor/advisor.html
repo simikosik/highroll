@@ -1,0 +1,36 @@
+<div class="advisor-sidebar" [class.hidden]="!isOpen">
+  <div class="advisor-content">
+    <header class="advisor-header">
+      <h2>AI poradca</h2>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </header>
+
+    <section class="advisor-intro">
+      <p>
+        Tu môžeš požiadať o rady týkajúce sa blackjacku, stratégie alebo rizík hazardu.
+      </p>
+    </section>
+
+    <section class="chat-box">
+      <div class="message" *ngFor="let message of messages()" [ngClass]="message.role">
+        <span class="message-role">{{ message.role === 'assistant' ? 'Poradca' : 'Ty' }}</span>
+        <p class="message-text">{{ message.text }}</p>
+      </div>
+    </section>
+
+    <form class="input-form" (ngSubmit)="sendMessage()">
+      <textarea
+        name="userInput"
+        rows="4"
+        [value]="userInput()"
+        (input)="userInput.set($any($event.target).value)"
+        placeholder="Napíš svoju otázku (Enter = poslať)"
+        [disabled]="isLoading()"
+        (keydown.enter.prevent)="sendMessage()"
+      ></textarea>
+      <button type="button" (click)="sendMessage()" [disabled]="isLoading() || userInput() === ''" class="send-btn">
+        {{ isLoading() ? 'Posielam...' : 'POSLAŤ' }}
+      </button>
+    </form>
+  </div>
+</div>

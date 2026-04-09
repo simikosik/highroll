@@ -86,7 +86,10 @@ h3 {
  
   color: #f9f4f5;
   padding: 1.5rem 2rem;
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1.5rem;;
   border-radius: 0.8rem;
 }
 
@@ -97,6 +100,7 @@ h3 {
   color: #f9f4f5;
   padding: 1.5rem 2rem;
   margin-bottom: 1.5rem;
+
   border-radius: 0.8rem;
 }
 
@@ -201,6 +205,10 @@ h2 {
   gap: 24px;
 }
 
+.layout.advisor-open {
+  margin-left: 320px;
+}
+
 .game-area {
   flex: 2;
 }
@@ -301,5 +309,39 @@ h2 {
     padding: 0.6rem 1.2rem;
     font-size: 0.8rem;
   }
+
+  .advisor-section {
+  margin: 2rem 0;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.advisor-toggle {
+  background: linear-gradient(135deg, #c8b8db 0%, #a898c8 100%);
+  color: #502f4c;
+  border: 3px solid #502f4c;
+  padding: 1.2rem 2.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-family: 'ITC Eras Light', serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(80, 47, 76, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
+}
+
+.advisor-toggle:hover {
+  background: linear-gradient(135deg, #f9f4f5 0%, #c8b8db 100%);
+  color: #502f4c;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(80, 47, 76, 0.5);
+}
+
+.advisor-toggle:active {
+  transform: translateY(-1px);
+}
 
 }

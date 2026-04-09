@@ -2,15 +2,16 @@ import { Component, signal, inject } from '@angular/core';
 import { BjCard, Card } from '../bjcard/bjcard';
 import { Deck } from '../deck';
 import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
-import { Home } from '../home/home';
 import { RouterLink } from '@angular/router';
 import { Stats } from '../stats';
-import { balance, changeBalance } from '../balance/balance.store';
+import { UserData } from '../userdata';
+import { Balance } from '../balance/balance';
+import { Advisor } from '../advisor/advisor';
 
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [BjCard, DeckVisualizer, Home, RouterLink],
+  imports: [BjCard, DeckVisualizer, RouterLink, Advisor],
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
@@ -18,7 +19,6 @@ export class Blackjack {
 
 
   deck = inject(Deck);
-  balance = balance;  
   canSplit = signal(false);
   canDouble = signal(false);
   playerHands = signal<Card[][]>([]);
@@ -27,6 +27,9 @@ export class Blackjack {
   gameOver = signal(false);
   message = signal('');
   dealerHidden = signal(true);
+  userData = inject(UserData);
+  readonly balance = this.userData.balance;
+  advisorOpen = signal(false);
 
   bet = signal(0);
   currentBet = signal(0);
@@ -34,16 +37,20 @@ export class Blackjack {
   gameInProgress = signal(false);
   stats = inject(Stats);
   
+  constructor() {
+  this.userData.loadUserData();
+}
 
-startGame() {
+
+  async startGame() {
 
   const betAmount = this.bet();
-  if (betAmount <= 0 || betAmount > this.balance()) {
+  if (betAmount <= 0 || betAmount > this.userData.balance()) {
     this.message.set('Invalid bet amount!');
     return;
   }
 
-  changeBalance(-betAmount);
+  await this.userData.updateBalance(-betAmount);
   this.currentBet.set(betAmount);
   this.doubleBet.set(0);
   this.gameInProgress.set(true);
@@ -86,19 +93,19 @@ hit() {
 
 }
 
-double() {
+  async double() {
 
   if (!this.canDouble()) return;
 
   const betAmount = this.currentBet();
-  const currentBalance = this.balance();
+  const currentBalance = this.userData.balance();
 
   if (betAmount > currentBalance) {
     this.message.set('Not enough balance to double!');
     return;
   }
 
-  changeBalance(-betAmount);
+  await this.userData.updateBalance(-betAmount);
   this.doubleBet.set(betAmount);
 
   const hands = [...this.playerHands()];
@@ -166,7 +173,7 @@ currentHand(): Card[] {
 }
 
 isDoubleAvailable(): boolean {
-  return this.canDouble() && this.currentBet() <= this.balance();
+  return this.canDouble() && this.currentBet() <= this.userData.balance();
 }
 
   stand() {
@@ -182,7 +189,7 @@ isDoubleAvailable(): boolean {
   }
   
 
-finishGame() {
+  async finishGame() {
 
   const dealer = this.getTotal(this.dealerHand());
   const hand = this.currentHand();
@@ -192,7 +199,6 @@ finishGame() {
   const totalBet = currentBet + doubleBet;
 
   let winnings = 0;
-  let resultMessage = '';
 
   if (player > 21) {
     this.message.set('bust');
@@ -220,10 +226,9 @@ finishGame() {
   }
 
     if (winnings > 0) {
-    changeBalance(winnings);
+    await this.userData.updateBalance(winnings);
   }
 
-  this.message.set(resultMessage);
   this.gameOver.set(true);
   this.gameInProgress.set(false);
 
@@ -253,4 +258,18 @@ finishGame() {
 
   }
 
+  addHundred = () => this.userData.updateBalance(100);
+  addThousand = () => this.userData.updateBalance(1000);
+
+  toggleAdvisor(): void {
+    this.advisorOpen.update(open => !open);
+  }
+
+  closeAdvisor(): void {
+    this.advisorOpen.set(false);
+  }
+
 }
+
+  
+

@@ -11,7 +11,7 @@
   </div>
 </header>
 
-<div class="layout">
+<div class="layout" [class.advisor-open]="advisorOpen()">
 
 
   <div class="game-area">
@@ -117,17 +117,28 @@
     <h2>{{ message() }}</h2>
     }
 
+     <div class="advisor-section">
+  <button class="advisor-toggle" (click)="toggleAdvisor()">
+    {{ advisorOpen() ? 'close ai' : 'open ai' }}
+  </button>
+</div>
+
+<app-advisor [isOpen]="advisorOpen()" (close)="closeAdvisor()"></app-advisor>
+
   </div>
 
 
-  <div class="side-panel">
 
+
+  <div class="side-panel">
+    <h3 class="stat-h3">balance</h3>
     <div class="balance-info">
-      <h3 class="stat-h3">balance</h3>
+
 
       <p>current balance: ${{ balance() }}</p>
       @if (gameInProgress()) {
       <p>current bet: ${{ currentBet() }}</p>
+
 
       @if (doubleBet() > 0) {
       <p style="color: #ff6b6b;">
@@ -135,6 +146,8 @@
       </p>
       }
       }
+      <button (click)="addHundred()" style="margin-top: 10px; margin-right: 5px;">+100</button>
+      <button (click)="addHundred()" style="margin-top: 10px;">+100</button>
     </div>
 
     <hr />

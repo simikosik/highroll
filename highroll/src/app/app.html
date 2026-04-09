@@ -7,8 +7,17 @@
 </head>
 <body>
     <nav>
-      <button *ngIf="auth.user()" (click)="auth.logout()"  routerLink="/login">Logout</button>
-      <button *ngIf="!auth.user()" routerLink="/login">Login</button>
+      @if (auth.user()) {
+      <button (click)="auth.logout()"  routerLink="/login">Logout</button>
+      }
+        @if (!auth.user()) {
+      <button  routerLink="/login">Login</button>
+        }
+      @if (auth.user()) {
+      <p> Logged as: {{ auth.user()?.displayName || auth.user()?.email }}</p>
+      } @else {
+      <p> </p>
+      }
     </nav>
 
 
