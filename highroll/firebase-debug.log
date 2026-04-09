@@ -1,12 +1,11 @@
-[debug] [2026-03-20T08:21:16.057Z] ----------------------------------------------------------------------
-[debug] [2026-03-20T08:21:16.059Z] Command:       C:\Users\kosiks23\nodejs\node-v22.19.0-win-x64\node.exe C:\Users\kosiks23\nodejs\node-v22.19.0-win-x64\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2026-03-20T08:21:16.060Z] CLI Version:   15.11.0
-[debug] [2026-03-20T08:21:16.060Z] Platform:      win32
-[debug] [2026-03-20T08:21:16.060Z] Node Version:  v22.19.0
-[debug] [2026-03-20T08:21:16.060Z] Time:          Fri Mar 20 2026 09:21:16 GMT+0100 (stredoeurópsky štandardný čas)
-[debug] [2026-03-20T08:21:16.061Z] ----------------------------------------------------------------------
+[debug] [2026-04-09T22:47:09.932Z] ----------------------------------------------------------------------
+[debug] [2026-04-09T22:47:09.935Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Šimon\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-04-09T22:47:09.935Z] CLI Version:   15.14.0
+[debug] [2026-04-09T22:47:09.935Z] Platform:      win32
+[debug] [2026-04-09T22:47:09.935Z] Node Version:  v22.20.0
+[debug] [2026-04-09T22:47:09.936Z] Time:          Fri Apr 10 2026 00:47:09 GMT+0200 (stredoeurópsky letný čas)
+[debug] [2026-04-09T22:47:09.936Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2026-03-20T08:21:16.063Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
 [info] 
      ######## #### ########  ######## ########     ###     ######  ########
      ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
@@ -16,18 +15,55 @@
 
 You're about to initialize a Firebase project in this directory:
 
-  C:\Users\kosiks23\hr\highroll\highroll
+  C:\Users\Šimon\Documents\hr\highroll\highroll
 
 Before we get started, keep in mind:
 
   * You are initializing within an existing Firebase project directory
 
-[debug] [2026-03-20T08:21:42.432Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
-[debug] [2026-03-20T08:21:42.432Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
-[debug] [2026-03-20T08:23:12.907Z] ExitPromptError: User force closed the prompt with SIGINT
-    at Interface.sigint (C:\Users\kosiks23\nodejs\node-v22.19.0-win-x64\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-04-09T22:47:33.311Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-09T22:47:33.312Z] > authorizing via signed-in user (simikosik5@gmail.com)
+[debug] [2026-04-09T22:47:33.313Z] Checked if tokens are valid: true, expires at: 1775778087582
+[debug] [2026-04-09T22:47:33.313Z] Checked if tokens are valid: true, expires at: 1775778087582
+[debug] [2026-04-09T22:47:33.314Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/highrollak [none]
+[debug] [2026-04-09T22:47:33.662Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/highrollak 200
+[debug] [2026-04-09T22:47:33.662Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/highrollak {"projectId":"highrollak","projectNumber":"204854273778","displayName":"highrollAK","name":"projects/highrollak","resources":{"hostingSite":"highrollak"},"state":"ACTIVE","etag":"1_0e8442ec-4fd8-4dc8-ba33-26d7b56744a9"}
+[info] i  Using project highrollak (highrollAK) . 
+[info] 
+=== Functions Setup
+[debug] [2026-04-09T22:47:33.669Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-09T22:47:33.669Z] > authorizing via signed-in user (simikosik5@gmail.com)
+[debug] [2026-04-09T22:47:33.669Z] [iam] checking project highrollak for permissions ["firebase.projects.get"]
+[debug] [2026-04-09T22:47:33.669Z] Checked if tokens are valid: true, expires at: 1775778087582
+[debug] [2026-04-09T22:47:33.669Z] Checked if tokens are valid: true, expires at: 1775778087582
+[debug] [2026-04-09T22:47:33.670Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/highrollak:testIamPermissions [none]
+[debug] [2026-04-09T22:47:33.670Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/highrollak:testIamPermissions  x-goog-user-project=highrollak
+[debug] [2026-04-09T22:47:33.670Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/highrollak:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-04-09T22:47:34.458Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/highrollak:testIamPermissions 200
+[debug] [2026-04-09T22:47:34.458Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/highrollak:testIamPermissions {"permissions":["firebase.projects.get"]}
+[info] 
+Detected existing codebase(s): default
+
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[error] Invalid codebase name. Codebase must be less than 64 characters and can contain only lowercase letters, numeric characters, underscores, and dashes.
+[debug] [2026-04-09T22:47:47.406Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\Šimon\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
     at Interface.emit (node:events:519:28)
-    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1132:18)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1128:18)
     at ReadStream.onkeypress (node:internal/readline/interface:271:20)
     at ReadStream.emit (node:events:531:35)
     at emitKeys (node:internal/readline/utils:370:14)

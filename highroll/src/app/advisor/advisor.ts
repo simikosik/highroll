@@ -31,8 +31,7 @@ export class Advisor {
     console.log('Advisor component created');
   }
 
-  private readonly apiEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
-  private readonly apiKey = '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';
+
 
   onTextChange(value: string): void {
     this.userInput.set(value);
