@@ -82,6 +82,8 @@
   padding: 1.5rem;
   overflow-y: auto;
   background: rgba(249, 244, 245, 0.02);
+  scrollbar-gutter: stable;
+  min-height: 0;
 }
 
 .message {
@@ -128,8 +130,10 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
+  padding-right: 2.5rem;
   border-top: 1px solid rgba(249, 244, 245, 0.1);
   background: rgba(249, 244, 245, 0.05);
+  flex-shrink: 0;
 }
 
 .input-form textarea {

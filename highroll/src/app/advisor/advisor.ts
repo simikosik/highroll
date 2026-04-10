@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -31,7 +32,8 @@ export class Advisor {
     console.log('Advisor component created');
   }
 
-
+  private readonly apiEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
+  private readonly apiKey = environment.groqApiKey;
 
   onTextChange(value: string): void {
     this.userInput.set(value);
