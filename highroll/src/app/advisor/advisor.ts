@@ -21,10 +21,11 @@ export class Advisor {
 
   userInput = signal('');
   isLoading = signal(false);
+
   messages = signal<Message[]>([
     {
       role: 'assistant',
-      text: 'Ahoj! Som tvoj AI poradca. Napíš mi otázku a ja ti pomôžem s tipmi na blackjack alebo hazard.',
+      text: 'Ahoj! Som Mgr. Ing. Generál Geňo Pálenik, tvoj osobný poradca pre blackjack.',
     },
   ]);
 
@@ -34,44 +35,85 @@ export class Advisor {
 
   private readonly apiEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
   private readonly apiKey = environment.groqApiKey;
+  
 
   onTextChange(value: string): void {
     this.userInput.set(value);
   }
 
   async sendMessage(): Promise<void> {
-    console.log('sendMessage called with input:', this.userInput(), 'isLoading:', this.isLoading());
-    
+    console.log('sendMessage called with input:', this.userInput());
+
     const prompt = this.userInput().trim();
-    if (!prompt || prompt === '') {
-      console.warn('Input is empty');
+    if (!prompt) {
+      console.warn('Empty input');
       return;
     }
 
-    this.messages.update(msgs => [...msgs, { role: 'user', text: prompt }]);
+    // add user message
+    this.messages.update(msgs => [
+      ...msgs,
+      { role: 'user', text: prompt },
+    ]);
+
     this.userInput.set('');
     this.isLoading.set(true);
-    console.log('Message added, waiting for response...');
 
     try {
-      const answer = await this.fetchGrokResponse(prompt);
-      this.messages.update(msgs => [...msgs, { role: 'assistant', text: answer }]);
+      const answer = await this.fetchGrokResponse();
+      
+      this.messages.update(msgs => [
+        ...msgs,
+        { role: 'assistant', text: answer },
+      ]);
     } catch (error) {
       console.error(error);
-      this.messages.update(msgs => [...msgs, {
-        role: 'assistant',
-        text: 'Nastala chyba pri komunikácii s AI službou. Skontroluj API kľúč a sieťové pripojenie.',
-      }]);
+
+      this.messages.update(msgs => [
+        ...msgs,
+        {
+          role: 'assistant',
+          text: 'Chyba pri komunikácii s API.',
+        },
+      ]);
     } finally {
       this.isLoading.set(false);
     }
   }
 
-  private async fetchGrokResponse(prompt: string): Promise<string> {
-    const conversationMessages = this.messages().slice(1); // skip initial assistant message
+  private async fetchGrokResponse(): Promise<string> {
+    const conversationMessages = this.messages().slice(1);
+
     const messages = [
-      { role: 'system' as const, content: 'Si užitočný AI poradca pre blackjack a hazard.' },
-      ...conversationMessages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.text })),
+      {
+        role: 'system' as const,
+        content: `Si odborný poradca na blackjack so skúsenosťami. Tvoja úloha je dávať presné a užitočné rady založené na basic strategy.
+
+PRAVIDLÁ:
+1. Vždy odpovedaj iba v SLOVENČINE
+2. Buď stručný a jasný (max 2-3 vety)
+3. Rady dávaj podľa hernej situácie hráča
+
+BASIC STRATEGY:
+- Pod 12: Hit vždy
+- 12-16: Záleží na dealeroej karte. Ako dealer ukazuje 2-6, Stand. Ako 7-Ace, Hit.
+- 17+: Stand vždy
+- Soft 17 (A+6): Hit
+- Pár 8s, 9s, Aces: Split vždy
+- Pár 2s, 3s, 7s: Split ak dealer ukazuje 2-7
+- Pár 4s, 6s: Hit (nerozdeľuj)
+- Pár 5s: Nikdy nerozdeľuj, Double Down
+- Pár 10s: Nikdy nerozdeľuj, Stand
+- Double Down: Len pri 11 (vždy), pri 10 (ak dealer <10), pri 9 (ak dealer 3-6)
+
+Odpovedaj ako skúsený poradca, nie ako robot. Používaj bežné výrazy a buď priateľský.
+Medzi symboly kariet používaš: 2-10, J, Q, K, A, a farby: ♠, ♥, ♦, ♣ (Spades, Hearts, Diamonds, Clubs).
+Znaky kariet a symbolov neprekladáš, ale nechávaš v pôvodnej angličtine (Spades, Hearts, Diamonds, Clubs).`.trim(),
+      },
+      ...conversationMessages.map(m => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.text,
+      })),
     ];
 
     const response = await fetch(this.apiEndpoint, {
@@ -82,10 +124,13 @@ export class Advisor {
       },
       body: JSON.stringify({
         messages,
-        model: 'llama-3.1-8b-instant',
-        temperature: 1,
-        max_tokens: 1024,
+        //model: 'llama-3.1-8b-instant',
+        model: 'llama-3.3-70b-versatile',
+        temperature: 1.2,
         top_p: 1,
+        max_tokens: 2048,
+        presence_penalty: 0.6,
+        frequency_penalty: 0.3,
         stream: false,
       }),
     });
@@ -95,7 +140,13 @@ export class Advisor {
     }
 
     const result = await response.json();
-    return result?.choices?.[0]?.message?.content || 'AI nedodal žiadnu odpoveď.';
+    const content = result?.choices?.[0]?.message?.content;
+
+    if (!content || content.trim() === '') {
+      return 'AI nevrátilo odpoveď, skús znova.';
+    }
+
+    return content;
   }
 
   onClose(): void {

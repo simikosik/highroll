@@ -13,7 +13,7 @@
 
     <section class="chat-box">
       <div class="message" *ngFor="let message of messages()" [ngClass]="message.role">
-        <span class="message-role">{{ message.role === 'assistant' ? 'Poradca' : 'Ty' }}</span>
+        <span class="message-role">{{ message.role === 'assistant' ? 'Mgr. Ing. Generál Geňo Pálenik' : 'Ty' }}</span>
         <p class="message-text">{{ message.text }}</p>
       </div>
     </section>
