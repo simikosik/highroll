@@ -34,12 +34,12 @@
     "firebase-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
-      "computedHash": "13b74b8f7a751a359a11cff2d20968b94c93cb394f88bf3ffbce477376414fac"
+      "computedHash": "e89a75403579e8b39a528df4362ffb8db1dada5ff7bc179217c29616ec54ec13"
     },
     "firebase-data-connect": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
-      "computedHash": "e759ecad9fd122aa5cbc4ac46e7e8b462a811650ce0b1d18893cf0a5033b71c9"
+      "computedHash": "2363ae3a4367cb118057411a88b530692c1b88b8b529a2d5b05f398339feea76"
     },
     "firebase-firestore-enterprise-native-mode": {
       "source": "firebase/agent-skills",
