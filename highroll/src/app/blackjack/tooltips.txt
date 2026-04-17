@@ -1,0 +1,33 @@
+<div class="buttons">
+      @if (!gameOver()) {
+
+      <div class="tooltip">
+        <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
+        <button (click)="hit()">hit</button>
+      </div>
+
+      <div class="tooltip">
+        <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
+        <button (click)="stand()">stand</button>
+      </div>
+
+      <div class="side">
+
+        <div class="tooltip">
+          <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
+          <button class="sidebutton" (click)="split()">split</button>
+        </div>
+
+        <div class="tooltip">
+          <span class="tooltip-text">zdvojnásobíš svoju aktuálnu stávku za cenu, že si zoberieš len jednu poslednú
+            kartu</span>
+          <button class="sidebutton" (click)="double()" [disabled]="!isDoubleAvailable()"
+            [title]="currentBet() > balance() ? 'Not enough balance!' : ''">
+            double
+          </button>
+        </div>
+
+      </div>
+
+      }
+    </div>

@@ -30,6 +30,7 @@ export class Blackjack {
   userData = inject(UserData);
   readonly balance = this.userData.balance;
   advisorOpen = signal(false);
+  showAI = signal(true);
 
   bet = signal(0);
   currentBet = signal(0);
@@ -258,6 +259,45 @@ isDoubleAvailable(): boolean {
 
   }
 
+  getAdvice(): string {
+
+  const hand = this.currentHand();
+  const dealerCard = this.dealerHand()[0];
+
+  const total = this.getTotal(hand);
+
+ 
+  if (hand.length === 2 && hand[0].rank === hand[1].rank) {
+    if (hand[0].rank === 'A' || hand[0].rank === '8') return 'SPLIT';
+    if (hand[0].rank === '10') return 'STAND';
+  }
+
+  
+  const hasAce = hand.some(c => c.rank === 'A');
+
+  if (hasAce && total <= 21) {
+    if (total <= 17) return 'HIT';
+    if (total === 18 && dealerCard.value >= 9) return 'HIT';
+    return 'STAND';
+  }
+
+ 
+  if (total <= 11) return 'HIT';
+  if (total >= 17) return 'STAND';
+
+  if (total >= 13 && total <= 16) {
+    if (dealerCard.value >= 7) return 'HIT';
+    return 'STAND';
+  }
+
+  if (total === 12) {
+    if (dealerCard.value >= 4 && dealerCard.value <= 6) return 'STAND';
+    return 'HIT';
+  }
+
+  return 'HIT';
+}
+
   addHundred = () => this.userData.updateBalance(100);
   addThousand = () => this.userData.updateBalance(1000);
 
@@ -268,6 +308,12 @@ isDoubleAvailable(): boolean {
   closeAdvisor(): void {
     this.advisorOpen.set(false);
   }
+
+  toggleAI() {
+  this.showAI.update(v => !v);
+}
+
+  
 
 }
 

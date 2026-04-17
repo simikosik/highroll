@@ -11,7 +11,7 @@
   </div>
 </header>
 
-<div class="layout" [class.advisor-open]="advisorOpen()">
+<div class="layout">
 
 
   <div class="game-area">
@@ -78,52 +78,23 @@
     <hr />
 
 
-    <div class="buttons">
-      @if (!gameOver()) {
-
-      <div class="tooltip">
-        <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
-        <button (click)="hit()">hit</button>
-      </div>
-
-      <div class="tooltip">
-        <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
-        <button (click)="stand()">stand</button>
-      </div>
-
-      <div class="side">
-
-        <div class="tooltip">
-          <span class="tooltip-text">zoberie ďalšiu kartu z decku zvýši hodnotu vašej ruky</span>
-          <button class="sidebutton" (click)="split()">split</button>
-        </div>
-
-        <div class="tooltip">
-          <span class="tooltip-text">zdvojnásobíš svoju aktuálnu stávku za cenu, že si zoberieš len jednu poslednú
-            kartu</span>
-          <button class="sidebutton" (click)="double()" [disabled]="!isDoubleAvailable()"
-            [title]="currentBet() > balance() ? 'Not enough balance!' : ''">
-            double
-          </button>
-        </div>
-
-      </div>
-
-      }
-    </div>
-
-
     @if (gameOver()) {
     <h2>{{ message() }}</h2>
     }
 
-     <div class="advisor-section">
-  <button class="advisor-toggle" (click)="toggleAdvisor()">
-    {{ advisorOpen() ? 'close ai' : 'open ai' }}
-  </button>
-</div>
+  
 
-<app-advisor [isOpen]="advisorOpen()" (close)="closeAdvisor()"></app-advisor>
+    <app-advisor [isOpen]="advisorOpen()" (close)="closeAdvisor()"></app-advisor>
+
+    @if (gameInProgress() && !gameOver()) {
+    <div class="game-actions">
+      <button class="action-button" (click)="hit()">hit</button>
+      <button class="action-button" (click)="stand()">stand</button>
+      <button class="action-button" (click)="double()" [disabled]="!isDoubleAvailable()"
+        [title]="currentBet() > balance() ? 'Not enough balance!' : ''">double</button>
+      <button class="action-button" (click)="split()">split</button>
+    </div>
+    }
 
   </div>
 
@@ -131,6 +102,8 @@
 
 
   <div class="side-panel">
+
+
     <h3 class="stat-h3">balance</h3>
     <div class="balance-info">
 
@@ -172,6 +145,45 @@
     </div>
   </div>
 
+</div>
+
+<div class="ai-panel" [class.hidden]="!showAI()">
+
+  <div class="ai-header">
+    <p><strong>Recommended move:</strong></p>
+    <button (click)="toggleAI()">
+      ×
+    </button>
+  </div>
+
+  <div class="ai-content">
+
+    @if (!gameInProgress()) {
+    <p>Start a game to get advice</p>
+    } @else {
+
+
+    <h2 class="ai-move">
+      {{ getAdvice() }}
+    </h2>
+    }
+
+  </div>
+
+</div>
+<div class="toggle-section">
+  @if (!showAI()) {
+  <button class="ai-toggle-button" (click)="toggleAI()">
+    <p>advice</p>  
+  </button>
+  }
+  @if (!advisorOpen()) {
+
+  
+    <button class="ai-toggle-button" (click)="toggleAdvisor()">
+      <p>open ai</p>
+    </button>
+  }
 </div>
 
 <hr />
