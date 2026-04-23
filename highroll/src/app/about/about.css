@@ -20,6 +20,8 @@
 
 .hero-title {
   font-size: 3rem;
+  
+  font-family: 'MingLiU-ExtB',serif;
   margin-bottom: 1rem;
 }
 
@@ -48,7 +50,6 @@
   margin-bottom: 3rem;
   font-size: 1rem;
   color: #502f4c;
-  font-family: 'ITC Eras Light', serif;
   line-height: 1.7;
 }
 

@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
-    <nav>
-      @if (auth.user()) {
-      <button (click)="auth.logout()"  routerLink="/login">Logout</button>
-      }
-        @if (!auth.user()) {
-      <button  routerLink="/login">Login</button>
-        }
-      @if (auth.user()) {
-      <p> Logged as: {{ auth.user()?.displayName || auth.user()?.email }}</p>
-      } @else {
-      <p> </p>
-      }
-    </nav>
+  <nav>
+    @if (auth.user()) {
+    <button (click)="auth.logout()" routerLink="/login">Logout</button>
+    }
+    @if (!auth.user()) {
+    <button routerLink="/login">Login</button>
+    }
+    @if (auth.user()) {
+    <p> Logged as: {{ auth.user()?.displayName || auth.user()?.email }}</p>
+    } @else {
+    <p> </p>
+    }
+    @if (auth.user()) {
+    <a routerLink="/profile" class="profile-button" title="Profile"></a>
+    }
+    @if (userData.role() === 'admin') {
+    <a routerLink="/admin">Admin Panel</a>
+    }
+  </nav>
 
 
   <router-outlet></router-outlet>
 </body>
+
 </html>

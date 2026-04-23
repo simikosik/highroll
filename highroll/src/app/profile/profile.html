@@ -1,0 +1,55 @@
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <h1>HIGHROLL</h1>
+    </div>
+    <nav class="navbar">
+      <a routerLink="/" class="nav-link">Home</a>
+      <a routerLink="/bj" class="nav-link">Blackjack</a>
+      <a routerLink="/profile" class="nav-link active">Profile</a>
+    </nav>
+  </div>
+</header>
+
+<div class="profile-container">
+
+  <h2 class="section-title">Your Profile</h2>
+
+  <!-- USER INFO -->
+  <div class="card">
+    <h3>Account</h3>
+
+    <p><strong>Email:</strong> {{ auth.user()?.email }}</p>
+    <p><strong>User ID:</strong> {{ auth.user()?.uid }}</p>
+  </div>
+
+  <!-- BALANCE -->
+  <div class="card">
+    <h3>Balance</h3>
+
+    <p class="balance">${{ userData.balance() }}</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="card">
+    <h3>Stats</h3>
+
+    <p>Wins: {{ stats.wins() }}</p>
+    <p>Losses: {{ stats.losses() }}</p>
+    <p>Win rate: {{ stats.getWinRate() }}%</p>
+    <p>House edge: {{ stats.getHouseEdge() }}</p>
+  </div>
+
+  <!-- WARNING -->
+  @if (stats.lossStreak() >= 3) {
+    <div class="warning">
+      ⚠️ You lost {{ stats.lossStreak() }} times in a row.
+    </div>
+  }
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn btn-primary" (click)="logout()">Logout</button>
+  </div>
+
+</div>

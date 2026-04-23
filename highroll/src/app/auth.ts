@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import {getFirestore, doc, setDoc} from 'firebase/firestore';
+
+import {getFirestore, doc, setDoc, getDoc} from 'firebase/firestore';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -26,6 +27,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,7 +50,8 @@ export class AuthService {
       createdAt: new Date(),
       chips: 1000,
       wins: 0,
-      losses: 0
+      losses: 0,
+      role: 'user'
     });
 
     return cred;
@@ -65,20 +68,26 @@ export class AuthService {
     return cred;
   }
 
-  async loginWithGoogle() {
+async loginWithGoogle() {
 
-    const provider = new GoogleAuthProvider();
-    const cred = await signInWithPopup(auth, provider);
+  const provider = new GoogleAuthProvider();
+  const cred = await signInWithPopup(auth, provider);
 
-    await setDoc(doc(db, 'users', cred.user.uid), {
+  const ref = doc(db, 'users', cred.user.uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    await setDoc(ref, {
       email: cred.user.email,
+      createdAt: new Date(),
       chips: 1000,
       wins: 0,
       losses: 0
-    }, { merge: true });
-
-    return cred;
+    });
   }
+
+  return cred;
+}
 
   async logout() {
     return signOut(auth);
