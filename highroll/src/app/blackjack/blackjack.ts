@@ -7,12 +7,12 @@ import { Stats } from '../stats';
 import { UserData } from '../userdata';
 import { Balance } from '../balance/balance';
 import { Advisor } from '../advisor/advisor';
-import { ResponsibleGamingPopup } from '../responsible-gaming-popup/responsible-gaming-popup';
+import { ResponsibleGamingService } from '../responsible-gaming.service';
 
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [BjCard, DeckVisualizer, RouterLink, Advisor, ResponsibleGamingPopup],
+  imports: [BjCard, DeckVisualizer, RouterLink, Advisor],
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
@@ -20,10 +20,8 @@ export class Blackjack implements OnDestroy {
 
 
   deck = inject(Deck);
-  userData = inject(UserData);
-  readonly balance = this.userData.balance;
   bet = signal(10);
-  // rgService = inject(ResponsibleGamingService);
+  rgService = inject(ResponsibleGamingService);
   canSplit = signal(false);
   canDouble = signal(false);
   playerHands = signal<Card[][]>([]);
@@ -32,6 +30,8 @@ export class Blackjack implements OnDestroy {
   gameOver = signal(false);
   message = signal('');
   dealerHidden = signal(true);
+  userData = inject(UserData);
+  readonly balance = this.userData.balance;
   advisorOpen = signal(false);
   showAI = signal(true);
 
@@ -238,7 +238,8 @@ isDoubleAvailable(): boolean {
     await this.userData.updateBalance(winnings);
   }
 
-  // this.rgService.recordGame(winnings === 0);
+  const loss = totalBet - winnings;
+  this.rgService.recordGame(loss);
 
   this.gameOver.set(true);
   this.gameInProgress.set(false);
