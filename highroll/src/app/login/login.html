@@ -1,0 +1,13 @@
+<div>
+  <h2>Login / Register</h2>
+
+  <input placeholder="Email" type="email" (input)="email.set($any($event.target).value)" />
+  <input type="password" placeholder="Password" (input)="password.set($any($event.target).value)" />
+
+  <button (click)="login()">Login</button>
+  <button (click)="register()">Register</button>
+
+  <hr>
+
+  <button data-google (click)="google()">Login with Google</button>
+</div>

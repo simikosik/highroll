@@ -1,0 +1,13 @@
+<h3>Stats</h3>
+
+<p>Wins: {{ stats.wins() }}</p>
+<p>Losses: {{ stats.losses() }}</p>
+<p>Win rate: {{ stats.getWinRate() }}%</p>
+<p>House edge: {{ stats.getHouseEdge() }}</p>
+
+@if (stats.lossStreak() >= 3) {
+  <p style="color: red;">
+    You lost {{ stats.lossStreak() }} times in a row.
+    Chasing losses is risky.
+  </p>
+}

@@ -2,16 +2,16 @@ import { Component, signal, inject } from '@angular/core';
 import { BjCard, Card } from '../bjcard/bjcard';
 import { Deck } from '../deck';
 import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
-import { Home } from '../home/home';
 import { RouterLink } from '@angular/router';
-import { balance, changeBalance } from '../balance/balance.store';
-import { ResponsibleGamingService } from '../responsible-gaming.service';
-import { ResponsibleGamingPopup } from '../responsible-gaming-popup/responsible-gaming-popup';
+import { Stats } from '../stats';
+import { UserData } from '../userdata';
+import { Balance } from '../balance/balance';
+import { Advisor } from '../advisor/advisor';
 
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [BjCard, DeckVisualizer, ResponsibleGamingPopup],
+  imports: [BjCard, DeckVisualizer, RouterLink, Advisor],
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
@@ -30,17 +30,34 @@ export class Blackjack {
   gameOver = signal(false);
   message = signal('');
   dealerHidden = signal(true);
+  userData = inject(UserData);
+  readonly balance = this.userData.balance;
+  advisorOpen = signal(false);
+  showAI = signal(true);
 
-startGame() {
+  bet = signal(0);
+  currentBet = signal(0);
+  doubleBet = signal(0);
+  gameInProgress = signal(false);
+  stats = inject(Stats);
+  
+  constructor() {
+  this.userData.loadUserData();
+}
 
-  if (this.balance() < this.bet()) {
-    this.message.set('Nedostatok prostriedkov!');
+
+  async startGame() {
+
+  const betAmount = this.bet();
+  if (betAmount <= 0 || betAmount > this.userData.balance()) {
+    this.message.set('Invalid bet amount!');
     return;
   }
 
-  this.rgService.startSession();
-
-  changeBalance(-this.bet());
+  await this.userData.updateBalance(-betAmount);
+  this.currentBet.set(betAmount);
+  this.doubleBet.set(0);
+  this.gameInProgress.set(true);
 
   const first = this.deck.draw();
   const second = this.deck.draw();
@@ -80,9 +97,20 @@ hit() {
 
 }
 
-double() {
+  async double() {
 
   if (!this.canDouble()) return;
+
+  const betAmount = this.currentBet();
+  const currentBalance = this.userData.balance();
+
+  if (betAmount > currentBalance) {
+    this.message.set('Not enough balance to double!');
+    return;
+  }
+
+  await this.userData.updateBalance(-betAmount);
+  this.doubleBet.set(betAmount);
 
   const hands = [...this.playerHands()];
   const i = this.currentHandIndex();
@@ -140,8 +168,16 @@ updateActions() {
 
 }
 
+updateBet(value: string) {
+  this.bet.set(Number(value));
+}
+
 currentHand(): Card[] {
   return this.playerHands()[this.currentHandIndex()];
+}
+
+isDoubleAvailable(): boolean {
+  return this.canDouble() && this.currentBet() <= this.userData.balance();
 }
 
   stand() {
@@ -157,38 +193,50 @@ currentHand(): Card[] {
   }
   
 
-finishGame() {
+  async finishGame() {
 
   const dealer = this.getTotal(this.dealerHand());
   const hand = this.currentHand();
   const player = this.getTotal(hand);
-  let loss = this.bet();
+   const currentBet = this.currentBet();
+  const doubleBet = this.doubleBet();
+  const totalBet = currentBet + doubleBet;
+
+  let winnings = 0;
 
   if (player > 21) {
-    this.message.set('Bust');
-    // už odpočítané
+    this.message.set('bust');
+     this.stats.recordLoss();
+    winnings = 0;
   } else if (dealer > 21) {
-    this.message.set('Dealer bust, W!');
-    changeBalance(this.bet() * 2);
-    loss = 0;
+    this.message.set('dealer bust, w!');
+    this.stats.recordWin();
+    winnings = totalBet * 2;
   } else if (player > dealer) {
-    this.message.set('W!');
-    changeBalance(this.bet() * 2);
-    loss = 0;
+    this.message.set('w!');
+    this.stats.recordWin();
+    winnings = totalBet * 2;
   } else if (player < dealer) {
-    this.message.set('Dealer W!');
-    // už odpočítané
+    this.message.set('dealer w!');
+    this.stats.recordLoss();
+    winnings = 0;
    } else if (player > 21 && dealer > 21) {
-    this.message.set('Bust!');
+    this.message.set('bust!');
+    winnings = 0;
+    this.stats.recordLoss();
   } else {
-    this.message.set('Tie!');
-    changeBalance(this.bet());
-    loss = 0;
+    this.message.set('tie!');
+    winnings = totalBet;
+  }
+
+    if (winnings > 0) {
+    await this.userData.updateBalance(winnings);
   }
 
   this.rgService.recordGame(loss);
 
   this.gameOver.set(true);
+  this.gameInProgress.set(false);
 
 }
 
@@ -216,4 +264,63 @@ finishGame() {
 
   }
 
+  getAdvice(): string {
+
+  const hand = this.currentHand();
+  const dealerCard = this.dealerHand()[0];
+
+  const total = this.getTotal(hand);
+
+ 
+  if (hand.length === 2 && hand[0].rank === hand[1].rank) {
+    if (hand[0].rank === 'A' || hand[0].rank === '8') return 'SPLIT';
+    if (hand[0].rank === '10') return 'STAND';
+  }
+
+  
+  const hasAce = hand.some(c => c.rank === 'A');
+
+  if (hasAce && total <= 21) {
+    if (total <= 17) return 'HIT';
+    if (total === 18 && dealerCard.value >= 9) return 'HIT';
+    return 'STAND';
+  }
+
+ 
+  if (total <= 11) return 'HIT';
+  if (total >= 17) return 'STAND';
+
+  if (total >= 13 && total <= 16) {
+    if (dealerCard.value >= 7) return 'HIT';
+    return 'STAND';
+  }
+
+  if (total === 12) {
+    if (dealerCard.value >= 4 && dealerCard.value <= 6) return 'STAND';
+    return 'HIT';
+  }
+
+  return 'HIT';
 }
+
+  addHundred = () => this.userData.updateBalance(100);
+  addThousand = () => this.userData.updateBalance(1000);
+
+  toggleAdvisor(): void {
+    this.advisorOpen.update(open => !open);
+  }
+
+  closeAdvisor(): void {
+    this.advisorOpen.set(false);
+  }
+
+  toggleAI() {
+  this.showAI.update(v => !v);
+}
+
+  
+
+}
+
+  
+

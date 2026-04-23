@@ -11,83 +11,186 @@
   </div>
 </header>
 
+<div class="layout">
 
-<h3>blackjack</h3>
-<div class="bet-section">
-  <label for="bet">Stávka:</label>
-  <input id="bet" type="number" [value]="bet()" (input)="bet.set($any($event.target).value)" min="1" max="1000" />
-  <p>Balance: {{ balance() }}</p>
-</div>
-<div class="buttons">
-  <button (click)="startGame()">new game</button>
-</div>
-<hr />
-<deck-visualizer></deck-visualizer>
-<hr />
 
-<h3>player</h3>
-<div class="player">
-  @for (hand of playerHands(); track $index) {
-  <div class="hand" [class.active]="currentHandIndex()">
-    <div class="card-row">
-      @for (card of hand; track $index) {
-      <app-bjcard [card]="card"></app-bjcard>
+  <div class="game-area">
+
+    <h3>blackjack</h3>
+
+
+    <div class="buttons">
+      @if (!gameInProgress()) {
+      <div class="betting-section">
+        <label>Bet Amount: </label>
+
+        <input type="number" [value]="bet()" (input)="updateBet($event.target.value)" min="1" [max]="balance()"
+          class="bet-input" />
+
+        <button (click)="startGame()" [disabled]="bet() <= 0 || bet() > balance()">
+          place bet & start
+        </button>
+      </div>
+      } @else {
+      <button disabled>game in progress...</button>
       }
     </div>
-    <p class="par">Total: {{ getTotal(hand) }}</p>
-  </div>
-  }
-</div>
 
 
-<hr />
+    <h3>dealer</h3>
+    <div class="dealer">
+      <div class="hand">
+        <div class="card-row">
+          @for (card of dealerHand(); track $index) {
+          @if (dealerHidden() && $index === 1) {
+          <span style="font-size: 24px;">?</span>
+          } @else {
+          <app-bjcard [card]="card"></app-bjcard>
+          }
+          }
+        </div>
+      </div>
+    </div>
 
-<h3>dealer</h3>
-<div class="dealer">
-  <div class="hand">
-    <div class="card-row">
-    @for (card of dealerHand(); track $index) {
-    @if (dealerHidden() && $index === 1) {
-    <span style="font-size: 24px; margin-right: 8px;">?</span>
+    @if (dealerHidden()) {
+    <p class="par">total: {{ dealerHand()[0].value }} + ?</p>
     } @else {
-    
-      <app-bjcard [card]="card"></app-bjcard>
+    <p class="par">total: {{ getTotal(dealerHand()) }}</p>
+    }
+
+    <hr />
+
+
+    <h3>player</h3>
+    <div class="player">
+      @for (hand of playerHands(); track $index) {
+      <div class="hand" [class.active]="$index === currentHandIndex()">
+        <div class="card-row">
+          @for (card of hand; track $index) {
+          <app-bjcard [card]="card"></app-bjcard>
+          }
+        </div>
+        <p class="par">total: {{ getTotal(hand) }}</p>
+      </div>
+      }
+    </div>
+
+    <hr />
+
+
+    @if (gameOver()) {
+    <h2>{{ message() }}</h2>
+    }
+
   
+
+    <app-advisor [isOpen]="advisorOpen()" (close)="closeAdvisor()"></app-advisor>
+
+    @if (gameInProgress() && !gameOver()) {
+    <div class="game-actions">
+      <button class="action-button" (click)="hit()">hit</button>
+      <button class="action-button" (click)="stand()">stand</button>
+      <button class="action-button" (click)="double()" [disabled]="!isDoubleAvailable()"
+        [title]="currentBet() > balance() ? 'Not enough balance!' : ''">double</button>
+      <button class="action-button" (click)="split()">split</button>
+    </div>
     }
-    }
+
+  </div>
+
+
+
+
+  <div class="side-panel">
+
+
+    <h3 class="stat-h3">balance</h3>
+    <div class="balance-info">
+
+
+      <p>current balance: ${{ balance() }}</p>
+      @if (gameInProgress()) {
+      <p>current bet: ${{ currentBet() }}</p>
+
+
+      @if (doubleBet() > 0) {
+      <p style="color: #ff6b6b;">
+        double bet: ${{ doubleBet() }}
+      </p>
+      }
+      }
+      <button (click)="addHundred()" style="margin-top: 10px; margin-right: 5px;">+100</button>
+      <button (click)="addHundred()" style="margin-top: 10px;">+100</button>
+    </div>
+
+    <hr />
+
+    <h3>deck</h3>
+    <deck-visualizer></deck-visualizer>
+
+    <hr />
+
+    <h3 class="stat-h3">stats</h3>
+    <div class="stats-info">
+      <p>wins: {{ stats.wins() }}</p>
+      <p>losses: {{ stats.losses() }}</p>
+      <p>win rate: {{ stats.getWinRate() }}%</p>
+      <p>house edge: {{ stats.getHouseEdge() }}</p>
+
+      @if (stats.lossStreak() >= 3) {
+      <p style="color: rgb(112, 12, 12);">
+        you lost {{ stats.lossStreak() }} times in a row.
+      </p>
+      }
     </div>
   </div>
+
 </div>
-@if (dealerHidden()) {
-<p class="par">Total: {{ dealerHand()[0].value }} + ?</p>
-} @else {
-<p class="par">Total: {{ getTotal(dealerHand()) }}</p>
-}
 
+<div class="ai-panel" [class.hidden]="!showAI()">
 
-<hr />
-<div class="buttons">
-  @if (!gameOver()) {
-  <button style="height: 50px;" (click)="hit()">hit</button>
-  <button style="height: 50px;" (click)="stand()">stand</button>
-  <div class="side">
-    <button class="sidebutton" (click)="split()">split</button>
-    <button class="sidebutton" (click)="double()">double</button>
+  <div class="ai-header">
+    <p><strong>Recommended move:</strong></p>
+    <button (click)="toggleAI()">
+      ×
+    </button>
   </div>
+
+  <div class="ai-content">
+
+    @if (!gameInProgress()) {
+    <p>Start a game to get advice</p>
+    } @else {
+
+
+    <h2 class="ai-move">
+      {{ getAdvice() }}
+    </h2>
+    }
+
+  </div>
+
+</div>
+<div class="toggle-section">
+  @if (!showAI()) {
+  <button class="ai-toggle-button" (click)="toggleAI()">
+    <p>advice</p>  
+  </button>
+  }
+  @if (!advisorOpen()) {
+
+  
+    <button class="ai-toggle-button" (click)="toggleAdvisor()">
+      <p>open ai</p>
+    </button>
   }
 </div>
-
-
-
-@if (gameOver()) {
-<h2>{{ message() }}</h2>
-}
-
 
 <hr />
 
 <footer class="footer">
-  <p>highroll | matulpal je absolutna legenda | 2026 </p>
+  <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026
+  </p>
 </footer>
 
 <app-responsible-gaming-popup></app-responsible-gaming-popup>
