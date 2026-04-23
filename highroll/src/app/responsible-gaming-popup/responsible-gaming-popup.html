@@ -1,0 +1,7 @@
+<div class="popup-overlay" *ngIf="service.showPopup()">
+  <div class="popup">
+    <h3>Upozornenie na zodpovedné hranie</h3>
+    <p>{{ service.popupMessage() }}</p>
+    <button (click)="close()">Rozumiem</button>
+  </div>
+</div>

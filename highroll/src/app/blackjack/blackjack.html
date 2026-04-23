@@ -13,6 +13,11 @@
 
 
 <h3>blackjack</h3>
+<div class="bet-section">
+  <label for="bet">Stávka:</label>
+  <input id="bet" type="number" [value]="bet()" (input)="bet.set($any($event.target).value)" min="1" max="1000" />
+  <p>Balance: {{ balance() }}</p>
+</div>
 <div class="buttons">
   <button (click)="startGame()">new game</button>
 </div>
@@ -22,7 +27,7 @@
 
 <h3>player</h3>
 <div class="player">
-  @for (hand of playerHands(); track currentHandIndex) {
+  @for (hand of playerHands(); track $index) {
   <div class="hand" [class.active]="currentHandIndex()">
     <div class="card-row">
       @for (card of hand; track $index) {
@@ -84,3 +89,5 @@
 <footer class="footer">
   <p>highroll | matulpal je absolutna legenda | 2026 </p>
 </footer>
+
+<app-responsible-gaming-popup></app-responsible-gaming-popup>

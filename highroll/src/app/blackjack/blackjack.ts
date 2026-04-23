@@ -4,11 +4,14 @@ import { Deck } from '../deck';
 import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
 import { Home } from '../home/home';
 import { RouterLink } from '@angular/router';
+import { balance, changeBalance } from '../balance/balance.store';
+import { ResponsibleGamingService } from '../responsible-gaming.service';
+import { ResponsibleGamingPopup } from '../responsible-gaming-popup/responsible-gaming-popup';
 
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [BjCard, DeckVisualizer, Home, RouterLink],
+  imports: [BjCard, DeckVisualizer, ResponsibleGamingPopup],
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
@@ -16,6 +19,9 @@ export class Blackjack {
 
 
   deck = inject(Deck);
+  readonly balance = balance;
+  bet = signal(10);
+  rgService = inject(ResponsibleGamingService);
   canSplit = signal(false);
   canDouble = signal(false);
   playerHands = signal<Card[][]>([]);
@@ -26,6 +32,15 @@ export class Blackjack {
   dealerHidden = signal(true);
 
 startGame() {
+
+  if (this.balance() < this.bet()) {
+    this.message.set('Nedostatok prostriedkov!');
+    return;
+  }
+
+  this.rgService.startSession();
+
+  changeBalance(-this.bet());
 
   const first = this.deck.draw();
   const second = this.deck.draw();
@@ -147,20 +162,31 @@ finishGame() {
   const dealer = this.getTotal(this.dealerHand());
   const hand = this.currentHand();
   const player = this.getTotal(hand);
+  let loss = this.bet();
 
   if (player > 21) {
     this.message.set('Bust');
+    // už odpočítané
   } else if (dealer > 21) {
     this.message.set('Dealer bust, W!');
+    changeBalance(this.bet() * 2);
+    loss = 0;
   } else if (player > dealer) {
     this.message.set('W!');
+    changeBalance(this.bet() * 2);
+    loss = 0;
   } else if (player < dealer) {
     this.message.set('Dealer W!');
+    // už odpočítané
    } else if (player > 21 && dealer > 21) {
     this.message.set('Bust!');
   } else {
     this.message.set('Tie!');
+    changeBalance(this.bet());
+    loss = 0;
   }
+
+  this.rgService.recordGame(loss);
 
   this.gameOver.set(true);
 
