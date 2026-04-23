@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnDestroy, computed } from '@angular/core';
 import { BjCard, Card } from '../bjcard/bjcard';
 import { Deck } from '../deck';
 import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
@@ -7,6 +7,7 @@ import { Stats } from '../stats';
 import { UserData } from '../userdata';
 import { Balance } from '../balance/balance';
 import { Advisor } from '../advisor/advisor';
+import { ResponsibleGamingService } from '../responsible-gaming.service';
 
 @Component({
   selector: 'app-blackjack',
@@ -15,11 +16,10 @@ import { Advisor } from '../advisor/advisor';
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
-export class Blackjack {
+export class Blackjack implements OnDestroy {
 
 
   deck = inject(Deck);
-  readonly balance = balance;
   bet = signal(10);
   rgService = inject(ResponsibleGamingService);
   canSplit = signal(false);
@@ -35,7 +35,6 @@ export class Blackjack {
   advisorOpen = signal(false);
   showAI = signal(true);
 
-  bet = signal(0);
   currentBet = signal(0);
   doubleBet = signal(0);
   gameInProgress = signal(false);
@@ -43,8 +42,12 @@ export class Blackjack {
   
   constructor() {
   this.userData.loadUserData();
+  this.rgService.startSession();
+  this.rgService.showResponsibleReminder();
 }
 
+  ngOnDestroy() {
+  }
 
   async startGame() {
 
@@ -54,6 +57,8 @@ export class Blackjack {
     return;
   }
 
+  this.rgService.recordBetClick();
+  this.rgService.showResponsibleReminder();
   await this.userData.updateBalance(-betAmount);
   this.currentBet.set(betAmount);
   this.doubleBet.set(0);
@@ -233,6 +238,7 @@ isDoubleAvailable(): boolean {
     await this.userData.updateBalance(winnings);
   }
 
+  const loss = totalBet - winnings;
   this.rgService.recordGame(loss);
 
   this.gameOver.set(true);
