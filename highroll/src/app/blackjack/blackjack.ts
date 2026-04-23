@@ -19,6 +19,9 @@ export class Blackjack {
 
 
   deck = inject(Deck);
+  readonly balance = balance;
+  bet = signal(10);
+  rgService = inject(ResponsibleGamingService);
   canSplit = signal(false);
   canDouble = signal(false);
   playerHands = signal<Card[][]>([]);
@@ -229,6 +232,8 @@ isDoubleAvailable(): boolean {
     if (winnings > 0) {
     await this.userData.updateBalance(winnings);
   }
+
+  this.rgService.recordGame(loss);
 
   this.gameOver.set(true);
   this.gameInProgress.set(false);
