@@ -1,0 +1,23 @@
+<header class="header">
+  <h1>ADMIN PANEL</h1>
+  <a routerLink="/">← back</a>
+</header>
+
+<div class="admin-container">
+
+  <h2>Add Balance</h2>
+
+  <label>User UID or Email:</label>
+  <input type="text" placeholder="UID or email" (input)="userId.set($any($event.target).value)" />
+
+  <label>Amount:</label>
+  <input type="number" min="1" placeholder="Amount" (input)="amount.set(+$any($event.target).value)" />
+
+  <div class="button-row">
+    <button type="button" (click)="addBalance()">Add Balance</button>
+    <button type="button" class="secondary" (click)="clearBalance()">Clear Balance</button>
+  </div>
+
+  <p>{{ message() }}</p>
+
+</div>

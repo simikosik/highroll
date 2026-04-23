@@ -8,23 +8,22 @@
 </head>
 
 <body>
-  <nav>
+  <nav class="top-nav">
     @if (auth.user()) {
-    <button (click)="auth.logout()" routerLink="/login">Logout</button>
+    <button class="nav-button" (click)="auth.logout()" routerLink="/login">Logout</button>
     }
     @if (!auth.user()) {
-    <button routerLink="/login">Login</button>
+    <button class="nav-button" routerLink="/login">Login</button>
     }
+    <div class="nav-spacer"></div>
     @if (auth.user()) {
-    <p> Logged as: {{ auth.user()?.displayName || auth.user()?.email }}</p>
-    } @else {
-    <p> </p>
+    <p class="nav-user">Logged as: {{ auth.user()?.displayName || auth.user()?.email }}</p>
+    }
+    @if (userData.role() === 'admin') {
+    <a routerLink="/admin" class="nav-link">Admin Panel</a>
     }
     @if (auth.user()) {
     <a routerLink="/profile" class="profile-button" title="Profile"></a>
-    }
-    @if (userData.role() === 'admin') {
-    <a routerLink="/admin">Admin Panel</a>
     }
   </nav>
 

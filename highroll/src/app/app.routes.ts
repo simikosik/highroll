@@ -6,6 +6,8 @@ import { About } from './about/about';
 import { Login } from './login/login';
 import { authGuard } from './auth-guard';
 import { Profile } from './profile/profile';
+import { Admin } from './admin/admin';
+import { adminGuard } from './admin-guard';
 
 
 export const routes: Routes = [
@@ -15,5 +17,6 @@ export const routes: Routes = [
     { path: 'profile', component: Profile, canActivate: [authGuard] },
     { path: 'about', component: About },
     { path: 'blog', component: Blog },
-    { path: '**', redirectTo: '' }
+    { path: 'admin', component: Admin, canActivate: [authGuard, adminGuard] },
+    { path: '**', redirectTo: '' },
 ];

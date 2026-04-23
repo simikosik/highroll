@@ -1,13 +1,58 @@
 body {
-
-  background-color:#C8B8DB;
+  margin: 0;
+  font-family: 'ITC Eras Light', serif;
+  background-color: #c8b8db;
+  color: #502f4c;
 }
-nav {
+
+.top-nav {
   display: flex;
+  align-items: center;
   gap: 1rem;
   justify-content: flex-end;
-  padding-right: 1rem;
+  padding: 1rem 2rem;
+background-color: #c8b8db;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(80, 47, 76, 0.08);
+  box-shadow: 0 10px 30px rgba(80, 47, 76, 0.08);
+  top: 0;
+  z-index: 100;
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
+.nav-user {
+  margin: 0;
+  padding: 0.5rem 0.9rem;
+  color: #502f4f;
+  background: rgba(200, 184, 219, 0.15);
+  border-radius: 999px;
+  font-size: 0.95rem;
+}
+
+.nav-button,
+.nav-link {
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: #f9f4f5;
+  color: #502f4c;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.nav-button:hover,
+.nav-link:hover {
+  background: #f9f4f5;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(80, 47, 76, 0.12);
 }
 
 .profile-button {
@@ -23,6 +68,13 @@ nav {
   text-decoration: none;
   border: 2px solid #c8b8db;
   box-shadow: 0 2px 8px rgba(80, 47, 76, 0.2);
+  position: relative;
+}
+
+.profile-button::after {
+  content: '👤';
+  color: #f9f4f5;
+  font-size: 1rem;
 }
 
 .profile-button:hover {

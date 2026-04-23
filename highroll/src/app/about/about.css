@@ -19,10 +19,11 @@
 }
 
 .hero-title {
-  font-size: 3rem;
-  
-  font-family: 'MingLiU-ExtB',serif;
+    font-size: 3rem;
+  font-weight: 500;
   margin-bottom: 1rem;
+  color: #f9f4f5; 
+  letter-spacing: 2px;
 }
 
 .hero-subtitle {
