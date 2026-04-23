@@ -18,7 +18,6 @@
 
     <h3>blackjack</h3>
 
-
     <div class="buttons">
       @if (!gameInProgress()) {
       <div class="betting-section">
@@ -107,7 +106,6 @@
     <h3 class="stat-h3">balance</h3>
     <div class="balance-info">
 
-
       <p>current balance: ${{ balance() }}</p>
       @if (gameInProgress()) {
       <p>current bet: ${{ currentBet() }}</p>
@@ -124,6 +122,11 @@
     </div>
 
     <hr />
+
+    <div class="warning-card">
+      <h4>Upozornenie</h4>
+      <p>{{ rgService.popupMessage() }}</p>
+    </div>
 
     <h3>deck</h3>
     <deck-visualizer></deck-visualizer>
@@ -192,5 +195,3 @@
   <p>highroll | matulpal je absolutna legend<a style="text-decoration: none;" class="ss" routerLink="/blog">a</a> | 2026
   </p>
 </footer>
-
-<app-responsible-gaming-popup></app-responsible-gaming-popup>

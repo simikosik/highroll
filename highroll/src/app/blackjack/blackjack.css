@@ -104,6 +104,21 @@ h3 {
   border-radius: 0.8rem;
 }
 
+.warning-card {
+  background: rgba(255, 243, 224, 0.95);
+  border: 1px solid #f8bb66;
+  color: #5a3e23;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.warning-card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #d84315;
+}
+
 .stat-h3 {
   margin: 1rem 0 0 0;
   padding-bottom: -1rem;
@@ -118,6 +133,9 @@ h3 {
   min-height: 30px;
   border-radius: 0.8rem;
   box-shadow: 0 4px 12px rgba(80, 47, 76, 0.1);
+}
+
+
   border-left: 5px solid #70587c;
 }
 

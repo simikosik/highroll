@@ -13,6 +13,6 @@ export class ResponsibleGamingPopup {
   service = inject(ResponsibleGamingService);
 
   close() {
-    this.service.closePopup();
+    this.service.popupMessage.set('');
   }
 }

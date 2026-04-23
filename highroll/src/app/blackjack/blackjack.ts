@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnDestroy, computed } from '@angular/core';
 import { BjCard, Card } from '../bjcard/bjcard';
 import { Deck } from '../deck';
 import { DeckVisualizer } from '../deck-visualizer/deck-visualizer';
@@ -16,7 +16,7 @@ import { ResponsibleGamingPopup } from '../responsible-gaming-popup/responsible-
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
-export class Blackjack {
+export class Blackjack implements OnDestroy {
 
 
   deck = inject(Deck);
@@ -42,8 +42,12 @@ export class Blackjack {
   
   constructor() {
   this.userData.loadUserData();
+  this.rgService.startSession();
+  this.rgService.showResponsibleReminder();
 }
 
+  ngOnDestroy() {
+  }
 
   async startGame() {
 
@@ -53,6 +57,8 @@ export class Blackjack {
     return;
   }
 
+  this.rgService.recordBetClick();
+  this.rgService.showResponsibleReminder();
   await this.userData.updateBalance(-betAmount);
   this.currentBet.set(betAmount);
   this.doubleBet.set(0);
