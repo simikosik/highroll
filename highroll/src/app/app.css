@@ -72,7 +72,7 @@ background-color: #c8b8db;
 }
 
 .profile-button::after {
-  content: '👤';
+  
   color: #f9f4f5;
   font-size: 1rem;
 }
