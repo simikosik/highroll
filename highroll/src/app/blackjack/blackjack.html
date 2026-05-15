@@ -18,23 +18,7 @@
 
     <h3>blackjack</h3>
 
-    <div class="buttons">
-      @if (!gameInProgress()) {
-      <div class="betting-section">
-        <label>Bet Amount: </label>
-
-        <input type="number" [value]="bet()" (input)="updateBet($event.target.value)" min="1" [max]="balance()"
-          class="bet-input" />
-
-        <button (click)="startGame()" [disabled]="bet() <= 0 || bet() > balance()">
-          place bet & start
-        </button>
-      </div>
-      } @else {
-      <button disabled>game in progress...</button>
-      }
-    </div>
-
+    
 
     <h3>dealer</h3>
     <div class="dealer">
@@ -76,6 +60,24 @@
 
     <hr />
 
+    <div class="buttons">
+      @if (!gameInProgress()) {
+      <div class="betting-section">
+        <label>Bet Amount: </label>
+
+        <input type="number" [value]="bet()" (input)="updateBet($event.target.value)" min="1" [max]="balance()"
+          class="bet-input" />
+
+        <button (click)="startGame()" [disabled]="bet() <= 0 || bet() > balance()">
+          place bet & start
+        </button>
+      </div>
+      } @else {
+      <button disabled>game in progress...</button>
+      }
+    </div>
+
+<hr />
 
     @if (gameOver()) {
     <h2>{{ message() }}</h2>
@@ -87,8 +89,8 @@
 
     @if (gameInProgress() && !gameOver()) {
     <div class="game-actions">
-      <button class="action-button" (click)="hit()">hit</button>
-      <button class="action-button" (click)="stand()">stand</button>
+      <button class="action-button" (click)="hit()" [disabled]="!isHitAvailable()">hit</button>
+      <button class="action-button" (click)="stand()" [disabled]="!isStandAvailable()">stand</button>
       <button class="action-button" (click)="double()" [disabled]="!isDoubleAvailable()"
         [title]="currentBet() > balance() ? 'Not enough balance!' : ''">double</button>
       <button class="action-button" (click)="split()">split</button>

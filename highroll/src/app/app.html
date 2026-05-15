@@ -20,7 +20,7 @@
     <p class="nav-user">Logged as: {{ auth.user()?.displayName || auth.user()?.email }}</p>
     }
     @if (userData.role() === 'admin') {
-    <a routerLink="/admin" class="nav-link">Admin Panel</a>
+    <button routerLink="/admin" class="nav-button">Admin Panel</button>
     }
     @if (auth.user()) {
     <a routerLink="/profile" class="profile-button" title="Profile"></a>

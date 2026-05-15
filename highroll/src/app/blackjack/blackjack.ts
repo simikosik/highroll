@@ -39,6 +39,8 @@ export class Blackjack implements OnDestroy {
   doubleBet = signal(0);
   gameInProgress = signal(false);
   stats = inject(Stats);
+  isAnimating = signal(false);
+  handResolved = signal(false);
   
   constructor() {
   this.userData.loadUserData();
@@ -78,6 +80,7 @@ export class Blackjack implements OnDestroy {
   this.dealerHidden.set(true);
   this.gameOver.set(false);
   this.message.set('');
+  this.handResolved.set(false);
 
   this.updateActions();
 
@@ -85,17 +88,20 @@ export class Blackjack implements OnDestroy {
 
 hit() {
 
-  if (this.gameOver()) return;
+  if (this.gameOver() || this.handResolved()) return;
 
   const hands = [...this.playerHands()];
   const i = this.currentHandIndex();
-
-  hands[i] = [...hands[i], this.deck.draw()];
-
+  const newCard = this.deck.draw();
+  
+  hands[i] = [...hands[i], newCard];
   this.playerHands.set(hands);
 
-  if (this.getTotal(hands[i]) > 21) {
-    this.nextHand();
+  const total = this.getTotal(hands[i]);
+
+  if (total > 21 || total === 21) {
+    this.handResolved.set(true);
+    setTimeout(() => this.completeHand(), 100);
   }
 
   this.updateActions();
@@ -104,7 +110,7 @@ hit() {
 
   async double() {
 
-  if (!this.canDouble()) return;
+  if (!this.canDouble() || this.handResolved()) return;
 
   const betAmount = this.currentBet();
   const currentBalance = this.userData.balance();
@@ -114,23 +120,26 @@ hit() {
     return;
   }
 
+  this.handResolved.set(true);
+
   await this.userData.updateBalance(-betAmount);
   this.doubleBet.set(betAmount);
 
   const hands = [...this.playerHands()];
   const i = this.currentHandIndex();
+  const newCard = this.deck.draw();
 
-  hands[i] = [...hands[i], this.deck.draw()];
-
+  hands[i] = [...hands[i], newCard];
   this.playerHands.set(hands);
-
-  this.nextHand();
+  this.updateActions();
+  
+  setTimeout(() => this.completeHand(), 100);
 
 }
 
 split() {
 
-  if (!this.canSplit()) return;
+  if (!this.canSplit() || this.handResolved()) return;
 
   const hands = [...this.playerHands()];
   const i = this.currentHandIndex();
@@ -148,14 +157,16 @@ split() {
 
 }
 
-nextHand() {
+completeHand() {
 
   if (this.currentHandIndex() < this.playerHands().length - 1) {
     this.currentHandIndex.update(i => i + 1);
+    this.handResolved.set(false);
     this.updateActions();
     return;
   }
 
+  this.handResolved.set(false);
   this.stand();
 
 }
@@ -185,15 +196,27 @@ isDoubleAvailable(): boolean {
   return this.canDouble() && this.currentBet() <= this.userData.balance();
 }
 
-  stand() {
+isHitAvailable(): boolean {
+  return !this.handResolved() && this.getTotal(this.currentHand()) < 21;
+}
+
+isStandAvailable(): boolean {
+  return !this.handResolved();
+}
+
+  async stand() {
+
+    if (!this.gameInProgress()) return;
 
     this.dealerHidden.set(false);
 
     while (this.getTotal(this.dealerHand()) < 17) {
-      this.dealerHand.update(h => [...h, this.deck.draw()]);
+      const newCard = this.deck.draw();
+      this.dealerHand.update(h => [...h, newCard]);
+      await new Promise(resolve => setTimeout(resolve, 400));
     }
 
-    this.finishGame();
+    await this.finishGame();
 
   }
   
