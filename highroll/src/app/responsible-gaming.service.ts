@@ -11,6 +11,7 @@ export class ResponsibleGamingService {
   popupMessage = signal('');
   showPopup = signal(false);
   popupText = signal('');
+  requireAck = signal(false);
   betClicks = signal(0);
 
   reminderMessages = [
@@ -54,6 +55,20 @@ export class ResponsibleGamingService {
     } else {
       this.lossStreak.set(0);
     }
+    // every 3rd game requires the player to acknowledge before continuing;
+    // the first two games in the cycle will show a non-blocking reminder
+    if (this.gamesPlayed() > 0) {
+      const mod = this.gamesPlayed() % 3;
+      if (mod === 0) {
+        this.popupMessage.set('Pre pokračovanie: urobte krátku prestávku a potvrďte stlačením "Rozumiem".');
+        this.requireAck.set(true);
+      } else {
+        // non-blocking reminder for first two games in the cycle
+        this.popupMessage.set('Upozornenie: hrajte zodpovedne.');
+        this.requireAck.set(false);
+      }
+    }
+
     this.checkWarnings();
   }
 
@@ -107,5 +122,6 @@ export class ResponsibleGamingService {
   closePopup() {
     this.showPopup.set(false);
     this.popupText.set('');
+    this.requireAck.set(false);
   }
 }
