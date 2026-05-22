@@ -8,6 +8,7 @@ import { UserData } from '../userdata';
 import { Balance } from '../balance/balance';
 import { Advisor } from '../advisor/advisor';
 import { ResponsibleGamingService } from '../responsible-gaming.service';
+import { AdvisorService, AdviceResult } from '../advisor/advisor.service';
 
 @Component({
   selector: 'app-blackjack',
@@ -34,6 +35,7 @@ export class Blackjack implements OnDestroy {
   readonly balance = this.userData.balance;
   advisorOpen = signal(false);
   showAI = signal(true);
+  advisorService = inject(AdvisorService);
 
   currentBet = signal(0);
   doubleBet = signal(0);
@@ -41,6 +43,7 @@ export class Blackjack implements OnDestroy {
   stats = inject(Stats);
   isAnimating = signal(false);
   handResolved = signal(false);
+  cachedAdvice = signal<AdviceResult>({ move: '', explanation: '' });
   
   constructor() {
   this.userData.loadUserData();
@@ -182,6 +185,13 @@ updateActions() {
     hand[0].rank === hand[1].rank
   );
 
+  this.updateAdvisorCache();
+
+}
+
+private updateAdvisorCache(): void {
+  const advice = this.calculateAdvice();
+  this.cachedAdvice.set(advice);
 }
 
 updateBet(value: string) {
@@ -293,47 +303,53 @@ isStandAvailable(): boolean {
 
   }
 
-  getAdvice(): string {
-
-  const hand = this.currentHand();
-  const dealerCard = this.dealerHand()[0];
-
-  const total = this.getTotal(hand);
-
  
-  if (hand.length === 2 && hand[0].rank === hand[1].rank) {
-    if (hand[0].rank === 'A' || hand[0].rank === '8') return 'SPLIT';
-    if (hand[0].rank === '10') return 'STAND';
+  getTotalDisplay(hand: Card[]): string {
+    const hardTotal = this.getHardTotal(hand);
+    const softTotal = this.getTotal(hand);
+    
+    if (hardTotal === softTotal) {
+      return softTotal.toString();
+    }
+    return `${hardTotal}/${softTotal}`;
   }
 
+ 
+  private getHardTotal(hand: Card[]): number {
+    let total = 0;
+    for (const card of hand) {
+      if (card.rank === 'A') {
+        total += 1;
+      } else {
+        total += card.value;
+      }
+    }
+    return total;
+  }
+
+  private calculateAdvice(): AdviceResult {
   
-  const hasAce = hand.some(c => c.rank === 'A');
+    if (!this.gameInProgress() || this.dealerHand().length === 0) {
+      return { move: '', explanation: '' };
+    }
 
-  if (hasAce && total <= 21) {
-    if (total <= 17) return 'HIT';
-    if (total === 18 && dealerCard.value >= 9) return 'HIT';
-    return 'STAND';
+    const hand = this.currentHand();
+    if (!hand || hand.length === 0) {
+      return { move: '', explanation: '' };
+    }
+
+    const dealerCard = this.dealerHand()[0];
+    const total = this.getTotal(hand);
+
+    return this.advisorService.calculateAdvice(hand, dealerCard, total);
   }
-
- 
-  if (total <= 11) return 'HIT';
-  if (total >= 17) return 'STAND';
-
-  if (total >= 13 && total <= 16) {
-    if (dealerCard.value >= 7) return 'HIT';
-    return 'STAND';
-  }
-
-  if (total === 12) {
-    if (dealerCard.value >= 4 && dealerCard.value <= 6) return 'STAND';
-    return 'HIT';
-  }
-
-  return 'HIT';
-}
 
   addHundred = () => this.userData.updateBalance(100);
   addThousand = () => this.userData.updateBalance(1000);
+
+  getAdvice(): AdviceResult {
+    return this.cachedAdvice();
+  }
 
   toggleAdvisor(): void {
     this.advisorOpen.update(open => !open);

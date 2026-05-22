@@ -51,6 +51,7 @@ export class AuthService {
       chips: 1000,
       wins: 0,
       losses: 0,
+      winRate: 0,
       role: 'user'
     });
 

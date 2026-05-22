@@ -53,7 +53,7 @@
           <app-bjcard [card]="card"></app-bjcard>
           }
         </div>
-        <p class="par">total: {{ getTotal(hand) }}</p>
+        <p class="par">total: {{ getTotalDisplay(hand) }}</p>
       </div>
       }
     </div>
@@ -167,10 +167,12 @@
     <p>Start a game to get advice</p>
     } @else {
 
-
     <h2 class="ai-move">
-      {{ getAdvice() }}
+      {{ getAdvice().move }}
     </h2>
+    <p class="ai-explanation">
+      {{ getAdvice().explanation }}
+    </p>
     }
 
   </div>
