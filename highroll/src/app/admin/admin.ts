@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { collection, doc, getDoc, getDocs, getFirestore, increment, query, updateDoc, where } from 'firebase/firestore';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
@@ -16,6 +17,7 @@ export class Admin {
   userId = signal('');
   amount = signal(0);
   message = signal('');
+  userData = signal<any | null>(null);
 
   private async resolveUserRef(identifier: string) {
     if (identifier.includes('@')) {
@@ -54,6 +56,10 @@ export class Admin {
     });
 
     this.message.set(`Added $${value} to user ${identifier}.`);
+    // refresh user info if visible
+    if (this.userData()) {
+      await this.getUser();
+    }
   }
 
   async clearBalance() {
@@ -81,6 +87,35 @@ export class Admin {
     });
 
     this.message.set(`Cleared balance for user ${identifier}.`);
+    if (this.userData()) {
+      await this.getUser();
+    }
+  }
+
+  async getUser() {
+    const identifier = this.userId().trim();
+    if (!identifier) {
+      this.message.set('Enter UID or email to fetch user.');
+      return;
+    }
+
+    const ref = await this.resolveUserRef(identifier);
+    if (!ref) {
+      this.message.set('User not found.');
+      this.userData.set(null);
+      return;
+    }
+
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      this.message.set('User document not found.');
+      this.userData.set(null);
+      return;
+    }
+
+    const data = snap.data();
+    this.userData.set({ uid: snap.id, email: data?.['email'], chips: data?.['chips'] ?? 0 });
+    this.message.set('User loaded.');
   }
 
 }

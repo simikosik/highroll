@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'ITC Eras Light', serif;
+  font-family: inherit;
   background-color: #c8b8db;
   color: #502f4c;
 }
