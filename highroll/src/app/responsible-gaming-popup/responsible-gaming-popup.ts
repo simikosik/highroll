@@ -13,6 +13,12 @@ export class ResponsibleGamingPopup {
   service = inject(ResponsibleGamingService);
 
   close() {
-    this.service.popupMessage.set('');
+    if (this.service.showPopup()) {
+      this.service.closePopup();
+    } else {
+      // close non-showPopup messages or mandatory ack
+      this.service.popupMessage.set('');
+      this.service.requireAck.set(false);
+    }
   }
 }

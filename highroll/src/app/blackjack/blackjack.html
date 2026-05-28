@@ -93,7 +93,7 @@
       <button class="action-button" (click)="stand()" [disabled]="!isStandAvailable()">stand</button>
       <button class="action-button" (click)="double()" [disabled]="!isDoubleAvailable()"
         [title]="currentBet() > balance() ? 'Not enough balance!' : ''">double</button>
-      <button class="action-button" (click)="split()">split</button>
+      <button class="action-button" (click)="split()" [disabled]="!isSplitAvailable()">split</button>
     </div>
     }
 
@@ -125,10 +125,7 @@
 
     <hr />
 
-    <div class="warning-card">
-      <h4>Upozornenie</h4>
-      <p>{{ rgService.popupMessage() }}</p>
-    </div>
+    <app-responsible-gaming-popup></app-responsible-gaming-popup>
 
     <h3>deck</h3>
     <deck-visualizer></deck-visualizer>

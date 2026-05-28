@@ -7,13 +7,14 @@ import { Stats } from '../stats';
 import { UserData } from '../userdata';
 import { Balance } from '../balance/balance';
 import { Advisor } from '../advisor/advisor';
+import { ResponsibleGamingPopup } from '../responsible-gaming-popup/responsible-gaming-popup';
 import { ResponsibleGamingService } from '../responsible-gaming.service';
 import { AdvisorService, AdviceResult } from '../advisor/advisor.service';
 
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [BjCard, DeckVisualizer, RouterLink, Advisor],
+  imports: [BjCard, DeckVisualizer, RouterLink, Advisor, ResponsibleGamingPopup],
   templateUrl: './blackjack.html',
   styleUrl: './blackjack.css'
 })
@@ -202,17 +203,26 @@ currentHand(): Card[] {
   return this.playerHands()[this.currentHandIndex()];
 }
 
-isDoubleAvailable(): boolean {
-  return this.canDouble() && this.currentBet() <= this.userData.balance();
-}
+  isDoubleAvailable(): boolean {
+    if (this.rgService.requireAck() || this.rgService.showPopup()) return false;
+    return this.canDouble() && this.currentBet() <= this.userData.balance();
+  }
 
-isHitAvailable(): boolean {
-  return !this.handResolved() && this.getTotal(this.currentHand()) < 21;
-}
+  isHitAvailable(): boolean {
+    if (this.rgService.requireAck() || this.rgService.showPopup()) return false;
+    return !this.handResolved() && this.getTotal(this.currentHand()) < 21;
+  }
 
-isStandAvailable(): boolean {
-  return !this.handResolved();
-}
+  isStandAvailable(): boolean {
+    if (this.rgService.requireAck() || this.rgService.showPopup()) return false;
+    return !this.handResolved();
+  }
+
+  isSplitAvailable(): boolean {
+    if (this.rgService.requireAck() || this.rgService.showPopup()) return false;
+    const hand = this.currentHand();
+    return hand.length === 2 && hand[0].rank === hand[1].rank;
+  }
 
   async stand() {
 

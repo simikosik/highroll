@@ -1,7 +1,7 @@
-<div class="popup-card" *ngIf="service.popupMessage()">
+<div class="popup-card" *ngIf="service.showPopup() || service.popupMessage()">
   <div class="popup-card-inner">
     <h4>Upozornenie</h4>
-    <p>{{ service.popupMessage() }}</p>
-    <button (click)="close()">Rozumiem</button>
+    <p>{{ service.showPopup() ? service.popupText() : service.popupMessage() }}</p>
+    <button *ngIf="service.showPopup() || service.requireAck()" (click)="close()">Rozumiem</button>
   </div>
 </div>
