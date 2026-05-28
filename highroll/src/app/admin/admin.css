@@ -123,4 +123,24 @@ button.secondary:hover { transform: translateY(-3px); }
 .user-info { margin-top: 1rem; background: rgba(106,79,102,0.04); padding: 1rem; border-radius: 8px; }
 .user-info h3 { margin: 0 0 .5rem 0 }
 
-.message { margin-top: 1rem; color: #6b4f66; font-weight: 600; }
+  .history-section { margin-top: 1.5rem; padding: 1rem; background: rgba(106,79,102,0.04); border-radius: 10px; }
+  .history-section h3 { margin-top: 0; }
+  .history-status { margin-bottom: 0.85rem; color: #5a3f51; font-size: 0.98rem; }
+  .history-loading { margin-bottom: 1rem; color: #5a3f51; font-weight: 700; }
+  .history-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  .history-table th,
+  .history-table td {
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid rgba(88,70,94,0.12);
+    text-align: left;
+    font-size: 0.95rem;
+    vertical-align: top;
+  }
+  .history-table th {
+    background: rgba(106,79,102,0.08);
+    color: #4a2f44;
+  }
+  .history-table tbody tr:hover {
+    background: rgba(106,79,102,0.06);
+  }
+

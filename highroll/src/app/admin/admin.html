@@ -40,6 +40,34 @@
       <p><strong>Chips:</strong> {{ userData()?.chips }}</p>
     </div>
 
+    <section class="history-section" *ngIf="userData()">
+      <h3>Match History Viewer</h3>
+      <p class="history-status" *ngIf="historyMessage()">{{ historyMessage() }}</p>
+      <div class="history-loading" *ngIf="historyLoading()">Loading match history…</div>
+      <table class="history-table" *ngIf="!historyLoading() && matchHistory().length">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Result</th>
+            <th>Game Type</th>
+            <th>Bet</th>
+            <th>Score</th>
+            <th>Extra Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of matchHistory()">
+            <td>{{ entry.timestamp ? (entry.timestamp | date:'medium') : '—' }}</td>
+            <td>{{ entry.result }}</td>
+            <td>{{ entry.gameType ?? '—' }}</td>
+            <td>{{ entry.betAmount ?? '—' }}</td>
+            <td>{{ entry.score ?? '—' }}</td>
+            <td>{{ entry | json }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <p class="message">{{ message() }}</p>
 
   </section>

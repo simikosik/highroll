@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { collection, doc, getDoc, getDocs, getFirestore, increment, query, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, increment, orderBy, query, updateDoc, where } from 'firebase/firestore';
+import { MatchHistoryEntry } from '../stats';
 
 @Component({
   selector: 'app-admin',
@@ -18,6 +19,9 @@ export class Admin {
   amount = signal(0);
   message = signal('');
   userData = signal<any | null>(null);
+  matchHistory = signal<MatchHistoryEntry[]>([]);
+  historyMessage = signal('');
+  historyLoading = signal(false);
 
   private async resolveUserRef(identifier: string) {
     if (identifier.includes('@')) {
@@ -110,12 +114,57 @@ export class Admin {
     if (!snap.exists()) {
       this.message.set('User document not found.');
       this.userData.set(null);
+      this.matchHistory.set([]);
+      this.historyMessage.set('');
       return;
     }
 
     const data = snap.data();
     this.userData.set({ uid: snap.id, email: data?.['email'], chips: data?.['chips'] ?? 0 });
     this.message.set('User loaded.');
+    await this.loadMatchHistory(snap.id);
+  }
+
+  private async loadMatchHistory(uid: string) {
+    this.matchHistory.set([]);
+    this.historyLoading.set(true);
+    this.historyMessage.set('Loading match history...');
+
+    try {
+      const historyQuery = query(
+        collection(this.db, 'users', uid, 'matchHistory'),
+        orderBy('timestamp', 'desc')
+      );
+      const snap = await getDocs(historyQuery);
+      const history = snap.docs.map(docSnapshot => {
+        const data = docSnapshot.data() as any;
+        const rawTimestamp = data.timestamp;
+        const timestamp = rawTimestamp && typeof rawTimestamp.toDate === 'function'
+          ? rawTimestamp.toDate()
+          : rawTimestamp instanceof Date
+            ? rawTimestamp
+            : new Date();
+
+        return {
+          id: docSnapshot.id,
+          result: data.result,
+          timestamp,
+          gameType: data.gameType,
+          betAmount: data.betAmount,
+          score: data.score,
+          ...data
+        } as MatchHistoryEntry;
+      });
+
+      this.matchHistory.set(history);
+      this.historyMessage.set(history.length ? '' : 'No match history found for this user.');
+    } catch (error) {
+      console.error('Failed to load match history:', error);
+      this.matchHistory.set([]);
+      this.historyMessage.set('Unable to load match history at this time.');
+    } finally {
+      this.historyLoading.set(false);
+    }
   }
 
 }
