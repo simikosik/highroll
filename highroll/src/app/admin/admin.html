@@ -2,22 +2,46 @@
   <h1>ADMIN PANEL</h1>
   <a routerLink="/">← back</a>
 </header>
+<div class="admin-fullscreen">
 
-<div class="admin-container">
-
-  <h2>Add Balance</h2>
-
-  <label>User UID or Email:</label>
-  <input type="text" placeholder="UID or email" (input)="userId.set($any($event.target).value)" />
-
-  <label>Amount:</label>
-  <input type="number" min="1" placeholder="Amount" (input)="amount.set(+$any($event.target).value)" />
-
-  <div class="button-row">
-    <button type="button" (click)="addBalance()">Add Balance</button>
-    <button type="button" class="secondary" (click)="clearBalance()">Clear Balance</button>
+  <div class="admin-toolbar">
+    <h1>Admin</h1>
+    <div class="toolbar-actions">
+      <a class="btn-back" routerLink="/">
+        <span class="icon">←</span>
+        <span class="label">Back</span>
+      </a>
+    </div>
   </div>
 
-  <p>{{ message() }}</p>
+  <section class="admin-container">
+
+    <h2>Add Balance</h2>
+
+    <label>User UID or Email:</label>
+    <input type="text" placeholder="UID or email" (input)="userId.set($any($event.target).value)" />
+
+    <label>Amount:</label>
+    <input type="number" min="1" placeholder="Amount" (input)="amount.set(+$any($event.target).value)" />
+
+    <div class="button-row">
+      <button type="button" (click)="addBalance()">Add Balance</button>
+      <button type="button" class="secondary" (click)="clearBalance()">Clear Balance</button>
+    </div>
+
+    <div class="extra-row">
+      <button type="button" class="muted" (click)="getUser()">Get User</button>
+    </div>
+
+    <div class="user-info" *ngIf="userData()">
+      <h3>User info</h3>
+      <p><strong>UID:</strong> {{ userData()?.uid }}</p>
+      <p><strong>Email:</strong> {{ userData()?.email ?? '—' }}</p>
+      <p><strong>Chips:</strong> {{ userData()?.chips }}</p>
+    </div>
+
+    <p class="message">{{ message() }}</p>
+
+  </section>
 
 </div>

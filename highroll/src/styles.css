@@ -2,3 +2,16 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/* Global font: prefer Arial, fall back to system sans */
+html, body {
+    font-family: Arial, Helvetica, "Segoe UI", Roboto, "Noto Sans", sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2f1f2b;
+}
+
+/* Force a consistent sans-serif across components (development override) */
+body, body * {
+    font-family: Arial, Helvetica, "Segoe UI", Roboto, "Noto Sans", sans-serif !important;
+}
