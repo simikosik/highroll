@@ -133,6 +133,68 @@ body {
   margin-top: 2rem;
 }
 
+.tab-bar {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  background: #f9f4f5;
+  border: 2px solid #70587c;
+  border-radius: 999px;
+  color: #70587c;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background: #e4d8ea;
+}
+
+.tab.active {
+  background: #70587c;
+  color: #f9f4f5;
+}
+
+.history-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.history-entry {
+  background: #ffffff;
+  border: 1px solid #e1d5e7;
+  border-radius: 0.75rem;
+  padding: 1rem 1.2rem;
+}
+
+.history-entry.win {
+  border-color: #27ae60;
+}
+
+.history-entry.loss {
+  border-color: #c0392b;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.history-badge {
+  color: #ffffff;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
 .btn {
   padding: 0.9rem 2rem;
   border: none;

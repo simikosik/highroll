@@ -243,51 +243,56 @@ currentHand(): Card[] {
 
   async finishGame() {
 
-  const dealer = this.getTotal(this.dealerHand());
-  const hand = this.currentHand();
-  const player = this.getTotal(hand);
-   const currentBet = this.currentBet();
-  const doubleBet = this.doubleBet();
-  const totalBet = currentBet + doubleBet;
+    const dealer = this.getTotal(this.dealerHand());
+    const hand = this.currentHand();
+    const player = this.getTotal(hand);
+    const currentBet = this.currentBet();
+    const doubleBet = this.doubleBet();
+    const totalBet = currentBet + doubleBet;
 
-  let winnings = 0;
+    let winnings = 0;
+    const details = {
+      gameType: 'Blackjack',
+      betAmount: totalBet,
+      score: player
+    };
 
-  if (player > 21) {
-    this.message.set('bust');
-     this.stats.recordLoss();
-    winnings = 0;
-  } else if (dealer > 21) {
-    this.message.set('dealer bust, w!');
-    this.stats.recordWin();
-    winnings = totalBet * 2;
-  } else if (player > dealer) {
-    this.message.set('w!');
-    this.stats.recordWin();
-    winnings = totalBet * 2;
-  } else if (player < dealer) {
-    this.message.set('dealer w!');
-    this.stats.recordLoss();
-    winnings = 0;
-   } else if (player > 21 && dealer > 21) {
-    this.message.set('bust!');
-    winnings = 0;
-    this.stats.recordLoss();
-  } else {
-    this.message.set('tie!');
-    winnings = totalBet;
-  }
+    if (player > 21) {
+      this.message.set('bust');
+      await this.stats.recordLoss(details);
+      winnings = 0;
+    } else if (dealer > 21) {
+      this.message.set('dealer bust, w!');
+      await this.stats.recordWin(details);
+      winnings = totalBet * 2;
+    } else if (player > dealer) {
+      this.message.set('w!');
+      await this.stats.recordWin(details);
+      winnings = totalBet * 2;
+    } else if (player < dealer) {
+      this.message.set('dealer w!');
+      await this.stats.recordLoss(details);
+      winnings = 0;
+    } else if (player > 21 && dealer > 21) {
+      this.message.set('bust!');
+      await this.stats.recordLoss(details);
+      winnings = 0;
+    } else {
+      this.message.set('tie!');
+      winnings = totalBet;
+    }
 
     if (winnings > 0) {
-    await this.userData.updateBalance(winnings);
+      await this.userData.updateBalance(winnings);
+    }
+
+    const loss = totalBet - winnings;
+    this.rgService.recordGame(loss);
+
+    this.gameOver.set(true);
+    this.gameInProgress.set(false);
+
   }
-
-  const loss = totalBet - winnings;
-  this.rgService.recordGame(loss);
-
-  this.gameOver.set(true);
-  this.gameInProgress.set(false);
-
-}
 
   getTotal(hand: Card[]): number {
 

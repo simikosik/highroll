@@ -14,22 +14,24 @@ export class UserData {
 
   balance = signal(0);
 
-async loadUserData() {
+  async loadUserData() {
+    const user = this.auth.user();
+    if (!user) return;
 
-  const user = this.auth.user();
-  if (!user) return;
+    const ref = doc(db, 'users', user.uid);
 
-  const ref = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
+    try {
+      const snap = await getDoc(ref);
 
-  if (snap.exists()) {
-    const data = snap.data();
-
-    this.balance.set(data['chips'] ?? 0);
-
-    this.role.set(data['role'] ?? 'user');
+      if (snap.exists()) {
+        const data = snap.data();
+        this.balance.set(data['chips'] ?? 0);
+        this.role.set(data['role'] ?? 'user');
+      }
+    } catch (error) {
+      console.error('Failed to load user profile data:', error);
+    }
   }
-}
   
 
   async updateBalance(amount: number) {

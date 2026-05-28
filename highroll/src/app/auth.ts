@@ -44,16 +44,19 @@ export class AuthService {
   async register(email: string, password: string) {
 
     const cred = await createUserWithEmailAndPassword(auth, email, password);
+    this.user.set(cred.user);
 
-    await setDoc(doc(db, 'users', cred.user.uid), {
+    const userRef = doc(db, 'users', cred.user.uid);
+
+    await setDoc(userRef, {
       email: cred.user.email,
       createdAt: new Date(),
       chips: 1000,
+      role: 'user',
       wins: 0,
       losses: 0,
-      winRate: 0,
-      role: 'user'
-    });
+      lossStreak: 0
+    }, { merge: true });
 
     return cred;
   }
@@ -61,34 +64,60 @@ export class AuthService {
   async login(email: string, password: string) {
 
     const cred = await signInWithEmailAndPassword(auth, email, password);
+    this.user.set(cred.user);
 
-    await setDoc(doc(db, 'users', cred.user.uid), {
-      email: cred.user.email
-    }, { merge: true });
+    const userRef = doc(db, 'users', cred.user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        email: cred.user.email,
+        wins: 0,
+        losses: 0,
+        lossStreak: 0
+      }, { merge: true });
+    } else {
+      await setDoc(userRef, {
+        email: cred.user.email,
+        wins: userSnap.data()['wins'] ?? 0,
+        losses: userSnap.data()['losses'] ?? 0,
+        lossStreak: userSnap.data()['lossStreak'] ?? 0
+      }, { merge: true });
+    }
 
     return cred;
   }
 
-async loginWithGoogle() {
+  async loginWithGoogle() {
 
-  const provider = new GoogleAuthProvider();
-  const cred = await signInWithPopup(auth, provider);
+    const provider = new GoogleAuthProvider();
+    const cred = await signInWithPopup(auth, provider);
+    this.user.set(cred.user);
 
-  const ref = doc(db, 'users', cred.user.uid);
-  const snap = await getDoc(ref);
+    const userRef = doc(db, 'users', cred.user.uid);
+    const snap = await getDoc(userRef);
 
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      email: cred.user.email,
-      createdAt: new Date(),
-      chips: 1000,
-      wins: 0,
-      losses: 0
-    });
+    if (!snap.exists()) {
+      await setDoc(userRef, {
+        email: cred.user.email,
+        createdAt: new Date(),
+        chips: 1000,
+        role: 'user',
+        wins: 0,
+        losses: 0,
+        lossStreak: 0
+      });
+    } else {
+      await setDoc(userRef, {
+        email: cred.user.email,
+        wins: snap.data()['wins'] ?? 0,
+        losses: snap.data()['losses'] ?? 0,
+        lossStreak: snap.data()['lossStreak'] ?? 0
+      }, { merge: true });
+    }
+
+    return cred;
   }
-
-  return cred;
-}
 
   async logout() {
     return signOut(auth);

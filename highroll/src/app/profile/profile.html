@@ -15,36 +15,78 @@
 
   <h2 class="section-title">Your Profile</h2>
 
-  <!-- USER INFO -->
-  <div class="card">
-    <h3>Account</h3>
-
-    <p><strong>Email:</strong> {{ auth.user()?.email }}</p>
-    <p><strong>User ID:</strong> {{ auth.user()?.uid }}</p>
+  <div class="tab-bar">
+    <button class="tab" [class.active]="selectedTab() === 'overview'" (click)="setTab('overview')">Overview</button>
+    <button class="tab" [class.active]="selectedTab() === 'history'" (click)="setTab('history')">Match History</button>
   </div>
 
-  <!-- BALANCE -->
-  <div class="card">
-    <h3>Balance</h3>
+  @if (selectedTab() === 'overview') {
 
-    <p class="balance">${{ userData.balance() }}</p>
-  </div>
+    <!-- USER INFO -->
+    <div class="card">
+      <h3>Account</h3>
 
-  <!-- STATS -->
-  <div class="card">
-    <h3>Stats</h3>
-
-    <p>Wins: {{ stats.wins() }}</p>
-    <p>Losses: {{ stats.losses() }}</p>
-    <p>Win rate: {{ stats.getWinRate() }}%</p>
-    <p>House edge: {{ stats.getHouseEdge() }}</p>
-  </div>
-
-  <!-- WARNING -->
-  @if (stats.lossStreak() >= 3) {
-    <div class="warning">
-      ⚠️ You lost {{ stats.lossStreak() }} times in a row.
+      <p><strong>Email:</strong> {{ auth.user()?.email }}</p>
+      <p><strong>User ID:</strong> {{ auth.user()?.uid }}</p>
     </div>
+
+    <!-- BALANCE -->
+    <div class="card">
+      <h3>Balance</h3>
+
+      <p class="balance">${{ userData.balance() }}</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="card">
+      <h3>Stats</h3>
+
+      <p>Wins: {{ stats.wins() }}</p>
+      <p>Losses: {{ stats.losses() }}</p>
+      <p>Win rate: {{ stats.getWinRate() }}%</p>
+      <p>House edge: {{ stats.getHouseEdge() }}</p>
+    </div>
+
+    <!-- WARNING -->
+    @if (stats.lossStreak() >= 3) {
+      <div class="warning">
+        ⚠️ You lost {{ stats.lossStreak() }} times in a row.
+      </div>
+    }
+
+  } @else {
+
+    <!-- MATCH HISTORY -->
+    <div class="card">
+      <h3>Match History</h3>
+
+      @if (history().length > 0) {
+        <div class="history-list">
+          @for (entry of history(); track $index) {
+            <div class="history-entry" [class.win]="entry.result === 'win'" [class.loss]="entry.result === 'loss'">
+              <div class="history-header">
+                <span class="history-badge" [style.background]="entry.result === 'win' ? '#27ae60' : '#c0392b'">
+                  {{ entry.result.toUpperCase() }}
+                </span>
+                <span>{{ formatDate(entry.timestamp) }}</span>
+              </div>
+              <p><strong>{{ entry.gameType }}</strong></p>
+              <p>
+                @if (entry.betAmount != null) {
+                  Bet: ${{ entry.betAmount }}
+                }
+                @if (entry.score != null) {
+                  Score: {{ entry.score }}
+                }
+              </p>
+            </div>
+          }
+        </div>
+      } @else {
+        <p>No match history yet. Play a game to start tracking your results.</p>
+      }
+    </div>
+
   }
 
   <!-- ACTIONS -->

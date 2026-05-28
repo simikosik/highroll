@@ -24,31 +24,46 @@ export class Login {
   async login() {
     try {
       await this.auth.login(this.email(), this.password());
-      await this.userData.loadUserData();
-      this.router.navigate(['/bj']);
     } catch (e) {
       alert('Login failed');
+      return;
     }
+
+    this.userData.loadUserData().catch(error => {
+      console.error('User data load failed after login:', error);
+    });
+
+    this.router.navigate(['/bj']);
   }
 
   async register() {
     try {
       await this.auth.register(this.email(), this.password());
-      await this.userData.loadUserData();
-      this.router.navigate(['/bj']);
     } catch (e) {
       alert('Registration failed');
+      return;
     }
+
+    this.userData.loadUserData().catch(error => {
+      console.error('User data load failed after registration:', error);
+    });
+
+    this.router.navigate(['/bj']);
   }
 
   async google() {
     try {
       await this.auth.loginWithGoogle();
-      await this.userData.loadUserData();
-      this.router.navigate(['/bj']);
     } catch (e) {
       alert('Google login failed');
+      return;
     }
+
+    this.userData.loadUserData().catch(error => {
+      console.error('User data load failed after Google login:', error);
+    });
+
+    this.router.navigate(['/bj']);
   }
 
 }

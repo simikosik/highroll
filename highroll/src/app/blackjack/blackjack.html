@@ -36,9 +36,13 @@
     </div>
 
     @if (dealerHidden()) {
-    <p class="par">total: {{ dealerHand()[0].value }} + ?</p>
+      @if (dealerHand().length > 0) {
+        <p class="par">total: {{ dealerHand()[0].value }} + ?</p>
+      } @else {
+        <p class="par">total: ?</p>
+      }
     } @else {
-    <p class="par">total: {{ getTotal(dealerHand()) }}</p>
+      <p class="par">total: {{ getTotal(dealerHand()) }}</p>
     }
 
     <hr />
