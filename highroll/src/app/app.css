@@ -59,7 +59,7 @@ background-color: #c8b8db;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #70587c 0%, #502f4c 100%);
+  background: #502f4c;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -12,13 +12,13 @@
 }
 
 .home-container {
-  background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f35 100%);
+  background: var(--dark-bg);
   color: var(--white);
 }
 
 /* Header */
 .header {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: var(--primary-color);
   padding: 1.5rem 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: sticky;
@@ -62,7 +62,7 @@
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-color) 100%);
+  background: var(--dark-bg);
   padding: 6rem 2rem;
   text-align: center;
   min-height: 500px;
@@ -75,7 +75,7 @@
   font-size: 3.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--white) 100%);
+  background: var(--accent-color);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -108,7 +108,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: var(--primary-color);
   color: var(--white);
 }
 
@@ -144,10 +144,10 @@
   font-size: 2.5rem;
   margin-bottom: 3rem;
   text-align: center;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary-color);
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
 }
 
 .features-grid {
@@ -301,7 +301,7 @@
 }
 
 .creator-passion {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+  background: rgba(99, 102, 241, 0.2);
   padding: 2rem;
   border-radius: 0.75rem;
   margin: 2rem 0;
@@ -384,7 +384,7 @@
 }
 
 .social-btn {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: var(--primary-color);
   color: var(--white);
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -400,7 +400,7 @@
 
 /* CTA Section */
 .cta {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  background: var(--primary-color);
   padding: 4rem 2rem;
   text-align: center;
 }

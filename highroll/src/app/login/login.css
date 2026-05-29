@@ -16,7 +16,7 @@ div {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+    background: #502f4c;
     width: 300px;
     padding: 20px;
     border: 1px solid #ccc;

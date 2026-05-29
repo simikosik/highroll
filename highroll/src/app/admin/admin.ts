@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, NgZone } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { collection, doc, getDoc, getDocs, getFirestore, increment, orderBy, query, updateDoc, where } from 'firebase/firestore';
@@ -14,6 +14,7 @@ import { MatchHistoryEntry } from '../stats';
 export class Admin {
 
   db = getFirestore();
+  private ngZone = inject(NgZone);
 
   userId = signal('');
   amount = signal(0);
@@ -62,7 +63,7 @@ export class Admin {
     this.message.set(`Added $${value} to user ${identifier}.`);
     // refresh user info if visible
     if (this.userData()) {
-      await this.getUser();
+      await this.ngZone.run(() => this.getUser());
     }
   }
 
@@ -92,7 +93,7 @@ export class Admin {
 
     this.message.set(`Cleared balance for user ${identifier}.`);
     if (this.userData()) {
-      await this.getUser();
+      await this.ngZone.run(() => this.getUser());
     }
   }
 
@@ -146,13 +147,13 @@ export class Admin {
             : new Date();
 
         return {
+          ...data,
           id: docSnapshot.id,
           result: data.result,
           timestamp,
           gameType: data.gameType,
           betAmount: data.betAmount,
-          score: data.score,
-          ...data
+          score: data.score
         } as MatchHistoryEntry;
       });
 

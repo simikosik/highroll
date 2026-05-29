@@ -16,7 +16,7 @@
   width: 60px;
   height: 90px;
   border-radius: 6px;
-  background: linear-gradient(135deg, #11214f, #1b407b);
+  background: #11214f;
   border: 2px solid rgb(0, 0, 0);
   transform: translateY(calc(var(--i, 0) * -2px));
 }

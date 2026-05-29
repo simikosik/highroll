@@ -1,47 +1,56 @@
-<header class="header">
-  <h1>ADMIN PANEL</h1>
-  <a routerLink="/">← back</a>
-</header>
-<div class="admin-fullscreen">
+<div class="admin-wrapper">
 
-  <div class="admin-toolbar">
-    <h1>Admin</h1>
-    <div class="toolbar-actions">
-      <a class="btn-back" routerLink="/">
-        <span class="icon">←</span>
-        <span class="label">Back</span>
-      </a>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <h1>HIGHROLL</h1>
+      </div>
+      <nav class="navbar">
+        <a routerLink="" class="nav-link">Home</a>
+        <a routerLink="/bj" class="nav-link">Blackjack</a>
+        <a routerLink="/about" class="nav-link">O nás</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <section class="admin-container">
-
-    <h2>Add Balance</h2>
-
-    <label>User UID or Email:</label>
-    <input type="text" placeholder="UID or email" (input)="userId.set($any($event.target).value)" />
-
-    <label>Amount:</label>
-    <input type="number" min="1" placeholder="Amount" (input)="amount.set(+$any($event.target).value)" />
-
-    <div class="button-row">
-      <button type="button" (click)="addBalance()">Add Balance</button>
-      <button type="button" class="secondary" (click)="clearBalance()">Clear Balance</button>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>Admin Panel</h1>
+      <a routerLink="/" class="btn-back">← Back</a>
     </div>
 
-    <div class="extra-row">
-      <button type="button" class="muted" (click)="getUser()">Get User</button>
-    </div>
+    <section class="form-section">
+      <h2>Add Balance</h2>
 
-    <div class="user-info" *ngIf="userData()">
-      <h3>User info</h3>
-      <p><strong>UID:</strong> {{ userData()?.uid }}</p>
-      <p><strong>Email:</strong> {{ userData()?.email ?? '—' }}</p>
-      <p><strong>Chips:</strong> {{ userData()?.chips }}</p>
-    </div>
+      <label>User UID or Email:</label>
+      <input type="text" placeholder="UID or email" (input)="userId.set($any($event.target).value)" />
+
+      <label>Amount:</label>
+      <input type="number" min="1" placeholder="Amount" (input)="amount.set(+$any($event.target).value)" />
+
+      <div class="button-row">
+        <button type="button" (click)="addBalance()">Add Balance</button>
+        <button type="button" class="secondary" (click)="clearBalance()">Clear Balance</button>
+      </div>
+
+      <div class="extra-row">
+        <button type="button" class="muted" (click)="getUser()">Get User</button>
+      </div>
+
+      <div class="message" *ngIf="message()">{{ message() }}</div>
+    </section>
+
+    <section class="user-section" *ngIf="userData()">
+      <h2>User Info</h2>
+      <div class="user-info">
+        <p><strong>UID:</strong> {{ userData()?.uid }}</p>
+        <p><strong>Email:</strong> {{ userData()?.email ?? '—' }}</p>
+        <p><strong>Chips:</strong> {{ userData()?.chips }}</p>
+      </div>
+    </section>
 
     <section class="history-section" *ngIf="userData()">
-      <h3>Match History Viewer</h3>
+      <h2>Match History</h2>
       <p class="history-status" *ngIf="historyMessage()">{{ historyMessage() }}</p>
       <div class="history-loading" *ngIf="historyLoading()">Loading match history…</div>
       <table class="history-table" *ngIf="!historyLoading() && matchHistory().length">
@@ -68,8 +77,6 @@
       </table>
     </section>
 
-    <p class="message">{{ message() }}</p>
-
-  </section>
+  </div>
 
 </div>

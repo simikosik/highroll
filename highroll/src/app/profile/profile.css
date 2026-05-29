@@ -10,7 +10,7 @@ body {
 }
 
 .header {
-  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+  background: #502f4c;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -81,7 +81,7 @@ body {
 }
 
 .card {
-  background: linear-gradient(270deg, #d9d2e3 0%, #f9f4f5 100%);
+  background: #f9f4f5;
   padding: 2rem;
   border-radius: 0.8rem;
   border-left: 5px solid #70587c;
@@ -119,7 +119,7 @@ body {
 
 .warning {
   padding: 1.2rem;
-  background: linear-gradient(270deg, #fdd7d7 0%, #f9f4f5 100%);
+  background: #f9f4f5;
   border-radius: 0.8rem;
   border-left: 5px solid #d64545;
   color: #d64545;

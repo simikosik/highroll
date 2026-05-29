@@ -1,7 +1,7 @@
 
 
 .header {
-  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+  background: #502f4c;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -340,7 +340,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+  background: #502f4c;
   color: #f9f4f5;
   padding: 12px 16px;
   border-radius: 50px;
@@ -357,7 +357,7 @@ h2 {
 .ai-toggle-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(80, 47, 76, 0.4);
-  background: linear-gradient(135deg, #5a3a56 0%, #7a5a86 100%);
+  background: #502f4c;
 }
 
 .ai-icon {
@@ -380,7 +380,7 @@ h2 {
 }
 
 .action-button {
-  background: linear-gradient(135deg, #502f4c 0%, #70587c 100%);
+  background: #502f4c;
   color: #f9f4f5;
   padding: 14px 20px;
   border-radius: 50px;
@@ -399,7 +399,7 @@ h2 {
 .action-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(80, 47, 76, 0.4);
-  background: linear-gradient(135deg, #5a3a56 0%, #7a5a86 100%);
+  background: #502f4c;
 }
 
 .action-button:disabled {
@@ -497,7 +497,7 @@ h2 {
 }
 
 .advisor-toggle {
-  background: linear-gradient(135deg, #c8b8db 0%, #a898c8 100%);
+  background: #c8b8db;
   color: #502f4c;
   border: 3px solid #502f4c;
   padding: 1.2rem 2.5rem;
@@ -514,7 +514,7 @@ h2 {
 }
 
 .advisor-toggle:hover {
-  background: linear-gradient(135deg, #f9f4f5 0%, #c8b8db 100%);
+  background: #f9f4f5;
   color: #502f4c;
   transform: translateY(-3px);
   box-shadow: 0 8px 28px rgba(80, 47, 76, 0.5);
